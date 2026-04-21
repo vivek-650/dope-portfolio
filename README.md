@@ -74,6 +74,48 @@ Notes:
 - Tracking is automatically disabled if required Umami env vars are missing.
 - Integration is wired globally in the root layout, so all routes are tracked.
 
+# Mini Game System (Neon PostgreSQL)
+
+This project includes two games with database-backed leaderboards:
+
+- Click Speed Game: `/click`
+- Typing Speed Game: `/typing`
+- Click Leaderboard: `/click/leaderboard`
+- Typing Leaderboard: `/typing/leaderboard`
+
+## 1. Configure Neon
+
+Add your Neon connection string to `.env.local`:
+
+```bash
+DATABASE_URL=postgresql://...
+```
+
+The app auto-creates the `game_scores` table and indexes on first API call.
+
+## 2. API Endpoints
+
+- `POST /api/score`
+  - Body:
+    - `gameType`: `click | typing`
+    - `username`: string
+    - `score`: number (for click)
+    - `wpm`: number (for typing)
+    - `accuracy`: optional number
+
+- `GET /api/leaderboard?game=click|typing`
+  - Returns top 10 by game rules:
+    - click: highest `score`
+    - typing: highest `wpm`
+  - If database has fewer than 10 entries, fake users are injected.
+
+## 3. UX Behaviors Included
+
+- Loading and error states
+- Anti-spam submit guards
+- Debounced leaderboard fetch
+- Last submitted user highlight in leaderboard (via localStorage)
+
 # License
 
 Licensed under the [MIT license](https://github.com/dillionverma/portfolio/blob/main/LICENSE.md).

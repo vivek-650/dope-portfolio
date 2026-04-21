@@ -6,11 +6,12 @@ import { DATA } from "@/data/resume";
 import Link from "next/link";
 import Markdown from "react-markdown";
 import ContactSection from "@/components/section/contact-section";
+import ClickGameSection from "@/components/section/click-game-section";
 import ProjectsSection from "@/components/section/projects-section";
+import TypingGameSection from "@/components/section/typing-game-section";
 import WorkSection from "@/components/section/work-section";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { TechIconLabel } from "@/components/tech-icon-label";
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -86,85 +87,19 @@ export default function Page() {
           </BlurFade>
         </div>
       </section>
-      <section id="education">
-        <div className="flex min-h-0 flex-col gap-y-6">
-          <BlurFade delay={BLUR_FADE_DELAY * 7}>
-            <h2 className="text-xl font-bold">Education</h2>
-          </BlurFade>
-          <div className="flex flex-col gap-8">
-            {DATA.education.map((education, index) => (
-              <BlurFade
-                key={education.school}
-                delay={BLUR_FADE_DELAY * 8 + index * 0.05}
-              >
-                <Link
-                  href={education.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-x-3 justify-between group"
-                >
-                  <div className="flex items-center gap-x-3 flex-1 min-w-0">
-                    {education.logoUrl ? (
-                      <img
-                        src={education.logoUrl}
-                        alt={education.school}
-                        className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border overflow-hidden object-contain flex-none"
-                      />
-                    ) : (
-                      <div className="size-8 md:size-10 p-1 border rounded-full shadow ring-2 ring-border bg-muted flex-none" />
-                    )}
-                    <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-                      <div className="font-semibold leading-none flex items-center gap-2">
-                        {education.school}
-                        <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" aria-hidden />
-                      </div>
-                      <div className="font-sans text-sm text-muted-foreground">
-                        {education.degree}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs tabular-nums text-muted-foreground text-right flex-none">
-                    <span>
-                      {education.start} - {education.end}
-                    </span>
-                  </div>
-                </Link>
-              </BlurFade>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section id="skills">
+
+      <section id="games">
         <div className="flex min-h-0 flex-col gap-y-4">
           <BlurFade delay={BLUR_FADE_DELAY * 9}>
-            <h2 className="text-xl font-bold">Skills</h2>
+            <h2 className="text-xl font-bold">Mini Games</h2>
           </BlurFade>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {DATA.skillGroups.map((group, groupIndex) => (
-              <BlurFade
-                key={group.category}
-                delay={BLUR_FADE_DELAY * 10 + groupIndex * 0.05}
-              >
-                <div className="border border-border rounded-xl p-4 bg-card/40 backdrop-blur-sm space-y-3 h-full">
-                  <h3 className="text-sm font-semibold tracking-wide text-foreground">
-                    {group.category}
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {group.items.map((item) => (
-                      <span
-                        key={item}
-                        className="border bg-background border-border ring-2 ring-border/20 rounded-xl h-8 w-fit px-3 flex items-center"
-                      >
-                        <TechIconLabel
-                          label={item}
-                          textClassName="text-foreground text-xs sm:text-sm font-medium"
-                        />
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </BlurFade>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+            <BlurFade delay={BLUR_FADE_DELAY * 10}>
+              <TypingGameSection />
+            </BlurFade>
+            <BlurFade delay={BLUR_FADE_DELAY * 10.5}>
+              <ClickGameSection />
+            </BlurFade>
           </div>
         </div>
       </section>

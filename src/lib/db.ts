@@ -1,18 +1,37 @@
 import { neon } from "@neondatabase/serverless";
 
-const connectionString = process.env.DATABASE_URL;
+let sqlClient: ReturnType<typeof neon> | null = null;
 
-if (!connectionString) {
-  throw new Error("Missing DATABASE_URL environment variable.");
+function getSqlClient() {
+  if (!sqlClient) {
+    const connectionString = process.env.DATABASE_URL;
+
+    if (!connectionString) {
+      throw new Error("Missing DATABASE_URL environment variable.");
+    }
+
+    sqlClient = neon(connectionString);
+  }
+
+  return sqlClient;
 }
-
-const sql = neon(connectionString);
 
 export async function query<T extends Record<string, unknown>>(
   text: string,
   params: unknown[] = []
 ): Promise<T[]> {
-  return sql.query<T>(text, params);
+  const sql = getSqlClient();
+  const result = await sql.query(text, params);
+
+  if (Array.isArray(result)) {
+    return result as T[];
+  }
+
+  if (result && typeof result === "object" && "rows" in result) {
+    return result.rows as T[];
+  }
+
+  return [];
 }
 
 let initPromise: Promise<void> | null = null;
