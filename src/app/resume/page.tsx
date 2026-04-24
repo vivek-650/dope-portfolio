@@ -39,7 +39,7 @@ export default function ResumePage() {
 
           <iframe
             title="Vivek Anand Resume"
-            src={`${RESUME_FILE}#view=FitH`}
+            src='https://drive.google.com/file/d/1xpODNTrdQof-jVRVlM4zBebrYlxtwUJ-/preview'
             className="w-full h-[76vh] min-h-[720px] border-0 bg-background"
           />
         </section>
