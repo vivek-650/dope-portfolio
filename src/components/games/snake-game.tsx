@@ -622,7 +622,7 @@
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /* ───────────────── TYPES ───────────────── */
 type Vec = { x: number; y: number };
@@ -839,6 +839,36 @@ export default function SnakeGame({ isActive, onComplete }: SnakeGameProps) {
   });
 
   const [bodySegs, setBodySegs] = useState<any[]>([]);
+  const [showMobileControls, setShowMobileControls] = useState(false);
+
+  const setDirection = useCallback(
+    (next: Vec) => {
+      if (phase !== "playing") return;
+
+      const current = dirRef.current;
+      const isReverse = current.x + next.x === 0 && current.y + next.y === 0;
+      if (isReverse) return;
+
+      dirRef.current = next;
+    },
+    [phase]
+  );
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const mediaQuery = window.matchMedia("(max-width: 900px), (pointer: coarse)");
+    const syncMobileState = () => setShowMobileControls(mediaQuery.matches);
+
+    syncMobileState();
+    mediaQuery.addEventListener("change", syncMobileState);
+    window.addEventListener("resize", syncMobileState);
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncMobileState);
+      window.removeEventListener("resize", syncMobileState);
+    };
+  }, []);
 
   /* ── START ── */
   useEffect(() => {
@@ -1026,13 +1056,13 @@ export default function SnakeGame({ isActive, onComplete }: SnakeGameProps) {
       };
       if (map[e.key]) {
         e.preventDefault();
-        dirRef.current = map[e.key];
+        setDirection(map[e.key]);
       }
     };
 
     window.addEventListener("keydown", handle);
     return () => window.removeEventListener("keydown", handle);
-  }, []);
+  }, [setDirection]);
 
   if (!isActive) return null;
 
@@ -1048,6 +1078,59 @@ export default function SnakeGame({ isActive, onComplete }: SnakeGameProps) {
         entering={phase === "entering"}
       />
       <Head {...headRender} />
+
+      {showMobileControls && phase === "playing" && (
+        <div
+          className="pointer-events-auto fixed left-1/2 z-[90] -translate-x-1/2"
+          style={{
+            bottom: "max(20px, env(safe-area-inset-bottom))",
+          }}
+        >
+          <div className="rounded-2xl border border-white/10 bg-black/45 p-3 shadow-[0_12px_36px_rgba(0,0,0,0.55)] backdrop-blur-md">
+            <div className="grid grid-cols-3 gap-2">
+              <div />
+              <button
+                type="button"
+                aria-label="Move up"
+                className="h-12 w-12 rounded-xl border border-white/20 bg-zinc-900/80 text-xs font-medium text-zinc-100 active:scale-95"
+                style={{ touchAction: "manipulation" }}
+                onClick={() => setDirection({ x: 0, y: -1 })}
+              >
+                Up
+              </button>
+              <div />
+
+              <button
+                type="button"
+                aria-label="Move left"
+                className="h-12 w-12 rounded-xl border border-white/20 bg-zinc-900/80 text-xs font-medium text-zinc-100 active:scale-95"
+                style={{ touchAction: "manipulation" }}
+                onClick={() => setDirection({ x: -1, y: 0 })}
+              >
+                Left
+              </button>
+              <button
+                type="button"
+                aria-label="Move down"
+                className="h-12 w-12 rounded-xl border border-white/20 bg-zinc-900/80 text-xs font-medium text-zinc-100 active:scale-95"
+                style={{ touchAction: "manipulation" }}
+                onClick={() => setDirection({ x: 0, y: 1 })}
+              >
+                Down
+              </button>
+              <button
+                type="button"
+                aria-label="Move right"
+                className="h-12 w-12 rounded-xl border border-white/20 bg-zinc-900/80 text-xs font-medium text-zinc-100 active:scale-95"
+                style={{ touchAction: "manipulation" }}
+                onClick={() => setDirection({ x: 1, y: 0 })}
+              >
+                Right
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {phase === "success" && (
         <div
