@@ -1,17 +1,66 @@
-"use client";
-
-import Navbar from "@/components/navbar";
-import { ThemeProvider } from "@/components/theme-provider";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
+import { DATA } from "@/data/resume";
 import "./globals.css";
+import Navbar from "@/components/navbar";
+import { cn } from "@/lib/utils";
 import { Geist, Geist_Mono } from "next/font/google";
-import { FlickeringGrid } from "@/components/magicui/flickering-grid";
-import UmamiAnalytics from "@/components/analytics/umami-analytics";
-import NekoLoader from "@/components/neko-loader";
-import Footer from "@/components/footer";
-import { NekoProvider, useNeko } from "@/context/neko-context";
+import { RootLayoutClient } from "./app-content";
 import type { ReactNode } from "react";
+
+const baseUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3000";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
+  title: `${DATA.name} · Frontend Engineer & Full-Stack Builder`,
+  description: DATA.description,
+  keywords: [
+    "full-stack engineer",
+    "frontend developer",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "AI",
+    "SaaS",
+    "portfolio",
+  ],
+  authors: [{ name: DATA.name }],
+  creator: DATA.name,
+  publisher: DATA.name,
+  robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: baseUrl,
+    siteName: DATA.name,
+    title: `${DATA.name} · Frontend Engineer & Full-Stack Builder`,
+    description: DATA.description,
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: DATA.name,
+        type: "image/png",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${DATA.name} · Frontend Engineer`,
+    description: DATA.description,
+    images: ["/opengraph-image.png"],
+    creator: "@curious__Anand",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
+  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
+  category: "technology",
+};
 
 const geist = Geist({
   subsets: ["latin"],
@@ -25,55 +74,38 @@ const geistMono = Geist_Mono({
   variable: "--font-mono",
 });
 
-function AppContent({ children }: { children: ReactNode }) {
-  const { showNeko } = useNeko();
-
-  return (
-    <>
-      {/* 🐱 Neko Loader */}
-      <NekoLoader enabled={showNeko} />
-
-      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-        <TooltipProvider delayDuration={0}>
-          
-          {/* 🔥 Background Effect */}
-          <div className="absolute inset-0 top-0 left-0 right-0 h-25 overflow-hidden z-0">
-            <FlickeringGrid
-              className="h-full w-full"
-              squareSize={3}
-              gridGap={3}
-              style={{
-                maskImage: "linear-gradient(to bottom, black, transparent)",
-                WebkitMaskImage:
-                  "linear-gradient(to bottom, black, transparent)",
-              }}
-            />
-          </div>
-
-          {/* 📦 Main Content */}
-          <div className="relative z-10 max-w-2xl mx-auto pt-24 pb-16 sm:pt-28 sm:pb-20 px-6">
-            {children}
-            <Footer />
-          </div>
-
-          {/* 🔝 Navbar */}
-          <Navbar />
-
-          {/* 📊 Analytics */}
-          <UmamiAnalytics />
-        </TooltipProvider>
-      </ThemeProvider>
-    </>
-  );
-}
-
 export default function RootLayout({
   children,
 }: {
   children: ReactNode;
 }) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: DATA.name,
+    url: baseUrl,
+    image: new URL(DATA.avatarUrl || "", baseUrl).toString(),
+    description: DATA.description,
+    jobTitle: "Frontend-focused Full-Stack Engineer",
+    location: {
+      "@type": "Place",
+      name: DATA.location,
+    },
+    sameAs: [
+      "https://github.com/vivek-650",
+      "https://linkedin.com/in/curiousvivek",
+      "https://x.com/curious__Anand",
+    ],
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased relative",
@@ -81,10 +113,8 @@ export default function RootLayout({
           geistMono.variable
         )}
       >
-        {/* ✅ GLOBAL PROVIDER (VERY IMPORTANT) */}
-        <NekoProvider>
-          <AppContent>{children}</AppContent>
-        </NekoProvider>
+        <Navbar />
+        <RootLayoutClient>{children}</RootLayoutClient>
       </body>
     </html>
   );
