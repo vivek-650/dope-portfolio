@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { DATA } from "@/data/resume";
 import "./globals.css";
-import Navbar from "@/components/navbar";
 import { cn } from "@/lib/utils";
 import { Geist, Geist_Mono } from "next/font/google";
 import { RootLayoutClient } from "./app-content";
@@ -113,7 +112,6 @@ export default function RootLayout({
           geistMono.variable
         )}
       >
-        <Navbar />
         <RootLayoutClient>{children}</RootLayoutClient>
       </body>
     </html>

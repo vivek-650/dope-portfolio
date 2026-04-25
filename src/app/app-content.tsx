@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemeProvider } from "@/components/theme-provider";
+import Navbar from "@/components/navbar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
@@ -33,6 +34,7 @@ function AppContent({ children }: { children: ReactNode }) {
 
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
         <TooltipProvider delayDuration={0}>
+          <Navbar />
           
           {/* 🔥 Background Effect */}
           <div className="absolute inset-0 top-0 left-0 right-0 h-25 overflow-hidden z-0">
