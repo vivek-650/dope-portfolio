@@ -1,7 +1,7 @@
 import { ensureGameScoresTable, query } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-type GameType = "click" | "typing";
+type GameType = "click" | "typing" | "aimlab";
 
 type ScorePayload = {
   gameType?: string;
@@ -9,6 +9,7 @@ type ScorePayload = {
   score?: number;
   wpm?: number;
   accuracy?: number;
+  durationMs?: number;
 };
 
 type ScoreRow = {
@@ -18,6 +19,7 @@ type ScoreRow = {
   score: number | null;
   wpm: number | null;
   accuracy: number | null;
+  duration_ms: number | null;
   created_at: string;
 };
 
@@ -39,7 +41,7 @@ function sanitizeUsername(raw: unknown) {
 }
 
 function normalizeGameType(value: unknown): GameType | null {
-  if (value === "click" || value === "typing") {
+  if (value === "click" || value === "typing" || value === "aimlab") {
     return value;
   }
 
@@ -49,7 +51,7 @@ function normalizeGameType(value: unknown): GameType | null {
 function validatePayload(payload: ScorePayload) {
   const gameType = normalizeGameType(payload.gameType);
   if (!gameType) {
-    return { error: "Invalid gameType. Use 'click' or 'typing'." };
+    return { error: "Invalid gameType. Use 'click', 'typing', or 'aimlab'." };
   }
 
   const username = sanitizeUsername(payload.username);
@@ -61,9 +63,38 @@ function validatePayload(payload: ScorePayload) {
 
   if (gameType === "click") {
     const score = asInt(payload.score);
+    const durationMs = asInt(payload.durationMs);
 
     if (score === null || score < 0) {
       return { error: "score is required for click game and must be >= 0." };
+    }
+
+    if (durationMs === null || durationMs < 250 || durationMs > 60000) {
+      return { error: "durationMs is required for click game and must be between 250 and 60000." };
+    }
+
+    return {
+      value: {
+        gameType,
+        username,
+        score,
+        wpm: null,
+        accuracy: null,
+        durationMs,
+      },
+    };
+  }
+
+  if (gameType === "aimlab") {
+    const score = asInt(payload.score);
+    const durationMs = asInt(payload.durationMs);
+
+    if (score === null || score < 0) {
+      return { error: "score is required for aimlab game and must be >= 0." };
+    }
+
+    if (durationMs === null || durationMs < 1000 || durationMs > 120000) {
+      return { error: "durationMs is required for aimlab game and must be between 1000 and 120000." };
     }
 
     return {
@@ -73,6 +104,7 @@ function validatePayload(payload: ScorePayload) {
         score,
         wpm: null,
         accuracy: accuracyRaw,
+        durationMs,
       },
     };
   }
@@ -89,6 +121,7 @@ function validatePayload(payload: ScorePayload) {
       score: null,
       wpm,
       accuracy: accuracyRaw,
+      durationMs: null,
     },
   };
 }
@@ -106,9 +139,9 @@ export async function POST(request: NextRequest) {
 
     const rows = await query<ScoreRow>(
       `
-        INSERT INTO game_scores (game_type, username, score, wpm, accuracy)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING id, game_type, username, score, wpm, accuracy, created_at;
+        INSERT INTO game_scores (game_type, username, score, wpm, accuracy, duration_ms)
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING id, game_type, username, score, wpm, accuracy, duration_ms, created_at;
       `,
       [
         validated.value.gameType,
@@ -116,6 +149,7 @@ export async function POST(request: NextRequest) {
         validated.value.score,
         validated.value.wpm,
         validated.value.accuracy,
+        validated.value.durationMs,
       ]
     );
 

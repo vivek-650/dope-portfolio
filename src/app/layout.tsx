@@ -1,13 +1,17 @@
+"use client";
+
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { DATA } from "@/data/resume";
 import { cn } from "@/lib/utils";
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Geist, Geist_Mono } from "next/font/google";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
 import UmamiAnalytics from "@/components/analytics/umami-analytics";
+import NekoLoader from "@/components/neko-loader";
+import Footer from "@/components/footer";
+import { NekoProvider, useNeko } from "@/context/neko-context";
+import type { ReactNode } from "react";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -21,47 +25,53 @@ const geistMono = Geist_Mono({
   variable: "--font-mono",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(DATA.url),
-  title: {
-    default: DATA.name,
-    template: `%s | ${DATA.name}`,
-  },
-  description: DATA.description,
-  openGraph: {
-    title: `${DATA.name}`,
-    description: DATA.description,
-    url: DATA.url,
-    siteName: `${DATA.name}`,
-    locale: "en_US",
-    type: "website",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  twitter: {
-    title: `${DATA.name}`,
-    card: "summary_large_image",
-  },
-  verification: {
-    google: "",
-    yandex: "",
-  },
-};
+function AppContent({ children }: { children: ReactNode }) {
+  const { showNeko } = useNeko();
+
+  return (
+    <>
+      {/* 🐱 Neko Loader */}
+      <NekoLoader enabled={showNeko} />
+
+      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+        <TooltipProvider delayDuration={0}>
+          
+          {/* 🔥 Background Effect */}
+          <div className="absolute inset-0 top-0 left-0 right-0 h-25 overflow-hidden z-0">
+            <FlickeringGrid
+              className="h-full w-full"
+              squareSize={3}
+              gridGap={3}
+              style={{
+                maskImage: "linear-gradient(to bottom, black, transparent)",
+                WebkitMaskImage:
+                  "linear-gradient(to bottom, black, transparent)",
+              }}
+            />
+          </div>
+
+          {/* 📦 Main Content */}
+          <div className="relative z-10 max-w-2xl mx-auto pt-24 pb-16 sm:pt-28 sm:pb-20 px-6">
+            {children}
+            <Footer />
+          </div>
+
+          {/* 🔝 Navbar */}
+          <Navbar />
+
+          {/* 📊 Analytics */}
+          <UmamiAnalytics />
+        </TooltipProvider>
+      </ThemeProvider>
+    </>
+  );
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -71,26 +81,10 @@ export default function RootLayout({
           geistMono.variable
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <TooltipProvider delayDuration={0}>
-            <div className="absolute inset-0 top-0 left-0 right-0 h-[100px] overflow-hidden z-0">
-              <FlickeringGrid
-                className="h-full w-full"
-                squareSize={2}
-                gridGap={2}
-                style={{
-                  maskImage: "linear-gradient(to bottom, black, transparent)",
-                  WebkitMaskImage: "linear-gradient(to bottom, black, transparent)",
-                }}
-              />
-            </div>
-            <div className="relative z-10 max-w-2xl mx-auto pt-24 pb-16 sm:pt-28 sm:pb-20 px-6">
-              {children}
-            </div>
-            <Navbar />
-            <UmamiAnalytics />
-          </TooltipProvider>
-        </ThemeProvider>
+        {/* ✅ GLOBAL PROVIDER (VERY IMPORTANT) */}
+        <NekoProvider>
+          <AppContent>{children}</AppContent>
+        </NekoProvider>
       </body>
     </html>
   );

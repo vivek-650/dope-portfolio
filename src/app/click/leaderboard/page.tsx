@@ -1,18 +1,11 @@
-import BlurFade from "@/components/magicui/blur-fade";
-import LeaderboardClient from "@/components/games/leaderboard-client";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Click Leaderboard",
-  description: "Top 10 click speed scores.",
+  title: "AimLab Leaderboard",
+  description: "Redirects to AimLab leaderboard.",
 };
 
 export default function ClickLeaderboardPage() {
-  return (
-    <main className="min-h-dvh pt-2">
-      <BlurFade delay={0.04}>
-        <LeaderboardClient gameType="click" />
-      </BlurFade>
-    </main>
-  );
+  redirect("/aimlab/leaderboard");
 }

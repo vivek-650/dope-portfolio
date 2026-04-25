@@ -8,9 +8,9 @@ export const DATA = {
   location: "Dumka, Jharkhand, India",
   locationLink: "https://maps.google.com/?q=Dumka%2C+Jharkhand%2C+India",
   description:
-    "Frontend-focused full-stack engineer shipping production AI products with startup speed, strong ownership, and product-level UX rigor.",
+    "Frontend-focused full-stack engineer. Love to play around UI, and engineer cool stuff.",
   summary:
-    "I build software end-to-end, from product architecture to polished user experiences, with a strong focus on measurable outcomes.\n\nIn startup teams, I have architected frontend systems from scratch, shipped multi-dashboard products, and optimized performance for scale and reliability.\n\nMy work increasingly sits at the intersection of product engineering and GenAI, where I design practical automation and AI workflows that solve real business problems.",
+    "I build software end-to-end, with a focus on structure, clarity, and how they actually feel to use.\n\nIn startup teams, I have architected frontend systems from scratch, shipped multi-dashboard products, and optimized performance for scale and reliability.\n\nRecently, I have built my first SaaS product, Samvad AI, an AI meeting assistant that auto-joins calls to generate structured summaries and action plans.\n\n Also I love to play games and watch web series.",
   avatarUrl: "/me.png",
   skillGroups: [
     {

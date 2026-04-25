@@ -1,121 +1,133 @@
-<div align="center">
-<img alt="Portfolio" src="https://github.com/dillionverma/portfolio/assets/16860528/57ffca81-3f0a-4425-b31d-094f61725455" width="90%">
-</div>
+# Vivek Anand Portfolio
 
-# Portfolio [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fdillionverma%2Fportfolio)
+A production-grade personal portfolio built with Next.js, designed to feel playful, fast, and intentional.
 
-Built with next.js, [shadcn/ui](https://ui.shadcn.com/), and [magic ui](https://magicui.design/), deployed on Vercel.
+This codebase combines a clean developer portfolio experience with interactive mini-games, analytics-backed insights, and content-driven blogging.
 
-# Features
+## Highlights
 
-- Setup only takes a few minutes by editing the [single config file](./src/data/resume.tsx)
-- Built using Next.js 14, React, Typescript, Shadcn/UI, TailwindCSS, Framer Motion, Magic UI
-- Includes a blog
-- Responsive for different devices
-- Optimized for Next.js and Vercel
+- Modern app architecture with Next.js App Router and TypeScript
+- Data-first profile content powered by [src/data/resume.tsx](./src/data/resume.tsx)
+- Blog powered by MDX content collections
+- Three interactive games with persistent leaderboards:
+  - Click game
+  - Typing game
+  - AimLab-inspired reflex game
+- Umami analytics integration with lifetime visitor counter in footer
+- Responsive, theme-aware UI with polished motion and dark-default presentation
 
-# Getting Started Locally
+## Tech Stack
 
-1. Clone this repository to your local machine:
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- shadcn/ui + Radix primitives
+- Motion
+- Neon Postgres (`@neondatabase/serverless`)
+- Umami Analytics
 
-   ```bash
-   git clone https://github.com/dillionverma/portfolio
-   ```
+## Project Routes
 
-2. Move to the cloned directory
-
-   ```bash
-   cd portfolio
-   ```
-
-3. Install dependencies:
-
-   ```bash
-   pnpm install
-   ```
-
-4. Start the local Server:
-
-   ```bash
-   pnpm dev
-   ```
-
-5. Open the [Config file](./src/data/resume.tsx) and make changes
-
-# Umami Analytics Setup
-
-Track total visitors and page views with Umami.
-
-1. Create a website in Umami (Cloud or self-hosted) and copy your Website ID.
-
-2. Copy environment template and fill it:
-
-   ```bash
-   cp .env.example .env.local
-   ```
-
-   Set these values in `.env.local`:
-   - `NEXT_PUBLIC_UMAMI_SCRIPT_URL` (e.g. `https://cloud.umami.is/script.js`)
-   - `NEXT_PUBLIC_UMAMI_WEBSITE_ID`
-   - `NEXT_PUBLIC_UMAMI_DOMAINS` (optional, recommended in production)
-
-3. Start the app:
-
-   ```bash
-   pnpm dev
-   ```
-
-4. Open your site and visit a few routes. In Umami dashboard, verify:
-   - Visitors count increases
-   - Page views are tracked across routes
-
-Notes:
-
-- Tracking is automatically disabled if required Umami env vars are missing.
-- Integration is wired globally in the root layout, so all routes are tracked.
-
-# Mini Game System (Neon PostgreSQL)
-
-This project includes two games with database-backed leaderboards:
-
-- Click Speed Game: `/click`
-- Typing Speed Game: `/typing`
+- Home: `/`
+- Work: `/work`
+- Resume: `/resume`
+- Blog: `/blog`
+- AimLab: `/aimlab`
+- AimLab Leaderboard: `/aimlab/leaderboard`
+- Click: `/click`
 - Click Leaderboard: `/click/leaderboard`
+- Typing: `/typing`
 - Typing Leaderboard: `/typing/leaderboard`
 
-## 1. Configure Neon
+## Local Development
 
-Add your Neon connection string to `.env.local`:
+1. Install dependencies:
 
 ```bash
-DATABASE_URL=postgresql://...
+pnpm install
 ```
 
-The app auto-creates the `game_scores` table and indexes on first API call.
+2. Create environment file:
 
-## 2. API Endpoints
+```bash
+cp .env.example .env.local
+```
 
-- `POST /api/score`
-  - Body:
-    - `gameType`: `click | typing`
-    - `username`: string
-    - `score`: number (for click)
-    - `wpm`: number (for typing)
-    - `accuracy`: optional number
+3. Start dev server:
 
-- `GET /api/leaderboard?game=click|typing`
-  - Returns top 10 by game rules:
-    - click: highest `score`
-    - typing: highest `wpm`
-  - If database has fewer than 10 entries, fake users are injected.
+```bash
+pnpm dev
+```
 
-## 3. UX Behaviors Included
+4. Open `http://localhost:3000`
 
-- Loading and error states
-- Anti-spam submit guards
-- Debounced leaderboard fetch
-- Last submitted user highlight in leaderboard (via localStorage)
+## Environment Variables
 
-# License
+### Core
 
-Licensed under the [MIT license](https://github.com/dillionverma/portfolio/blob/main/LICENSE.md).
+- `DATABASE_URL` - Neon/Postgres connection string used by score + leaderboard APIs
+
+### Umami (Client Tracking)
+
+- `NEXT_PUBLIC_UMAMI_SCRIPT_URL` - Example: `https://cloud.umami.is/script.js`
+- `NEXT_PUBLIC_UMAMI_WEBSITE_ID` - Website ID from Umami dashboard
+- `NEXT_PUBLIC_UMAMI_DOMAINS` - Optional comma-separated domains
+
+### Umami (Server-side Lifetime Visitors)
+
+Use one authentication method:
+
+- `UMAMI_API_KEY` (recommended)
+- or `UMAMI_BEARER_TOKEN`
+- or `UMAMI_USERNAME` + `UMAMI_PASSWORD`
+
+Optional:
+
+- `UMAMI_API_URL` - Explicit Umami API base URL. If omitted, derived from `NEXT_PUBLIC_UMAMI_SCRIPT_URL`.
+
+## Analytics Integration Notes
+
+- Global tracking script is mounted in root layout via [src/components/analytics/umami-analytics.tsx](./src/components/analytics/umami-analytics.tsx)
+- Lifetime visitors are fetched from [src/app/api/analytics/umami/visitors/route.ts](./src/app/api/analytics/umami/visitors/route.ts)
+- Footer displays lifetime total in [src/components/footer.tsx](./src/components/footer.tsx)
+- Integration degrades gracefully when analytics credentials are missing
+
+## Game APIs
+
+### `POST /api/score`
+
+Accepted `gameType` values:
+
+- `click`
+- `typing`
+- `aimlab`
+
+Payload fields vary by game and are validated server-side (`score`, `wpm`, `accuracy`, `durationMs`).
+
+### `GET /api/leaderboard?game=...`
+
+Accepted `game` query values:
+
+- `click`
+- `typing`
+- `aimlab`
+
+Returns top 10 entries per game strategy. If not enough records exist, the API pads with synthetic entries for fuller UX.
+
+## Content Editing
+
+- Personal/profile configuration: [src/data/resume.tsx](./src/data/resume.tsx)
+- Blog posts: [content](./content)
+
+## Scripts
+
+- `pnpm dev` - Run development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm lint` - Run ESLint
+- `pnpm lint:fix` - Auto-fix lint issues
+
+## License
+
+MIT License. See [LICENSE](./LICENSE).

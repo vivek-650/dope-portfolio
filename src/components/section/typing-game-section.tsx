@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Maximize2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 const PHRASES = [
   "The quick brown fox jumps over the lazy dog.",
@@ -28,12 +29,13 @@ export default function TypingGameSection() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   const timerRef = useRef<number | null>(null);
   const submitCooldownRef = useRef<number | null>(null);
 
-  const isComplete = useMemo(() => input === phrase, [input, phrase]);
   const isResultOpen = status === "finished";
+  const currentCharIndex = useMemo(() => Math.min(input.length, phrase.length - 1), [input.length, phrase.length]);
 
   const accuracy = useMemo(() => {
     if (input.length === 0) {
@@ -89,6 +91,10 @@ export default function TypingGameSection() {
   };
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (!startedAt || status !== "running") {
       if (timerRef.current) {
         window.clearInterval(timerRef.current);
@@ -135,6 +141,34 @@ export default function TypingGameSection() {
     }
   };
 
+  const getCharState = (index: number): "pending" | "active" | "correct" | "wrong" => {
+    if (index < input.length) {
+      return input[index] === phrase[index] ? "correct" : "wrong";
+    }
+
+    if (status !== "finished" && index === input.length) {
+      return "active";
+    }
+
+    return "pending";
+  };
+
+  const charClassName = (state: "pending" | "active" | "correct" | "wrong") => {
+    if (state === "correct") {
+      return "text-emerald-300 bg-emerald-500/12";
+    }
+
+    if (state === "wrong") {
+      return "text-rose-300 bg-rose-500/12";
+    }
+
+    if (state === "active") {
+      return "text-sky-200 bg-sky-500/15 ring-1 ring-sky-400/40";
+    }
+
+    return "text-muted-foreground";
+  };
+
   const submitScore = async () => {
     if (submitting || submitted || status !== "finished") {
       return;
@@ -175,7 +209,7 @@ export default function TypingGameSection() {
   };
 
   return (
-    <div className="rounded-xl border border-white/10 bg-card/30 backdrop-blur-xl p-4 sm:p-6 shadow-[0_20px_60px_-35px_rgba(0,0,0,0.8)] relative overflow-hidden">
+    <div className="rounded-xl border border-white/10 backdrop-blur-xl p-4 sm:p-6 shadow-[0_12px_34px_-24px_rgba(0,0,0,0.45)] relative">
       <Button
         asChild
         size="sm"
@@ -188,9 +222,21 @@ export default function TypingGameSection() {
       </Button>
 
       <div>
-        <div className="flex items-center justify-between gap-3 mb-3">
-          <p className="text-xl text-muted-foreground font-medium pr-14">{phrase}</p>
-          
+        <div className="flex items-center justify-between gap-3 mb-3" />
+
+        <div className="mb-3 rounded-lg p-3 min-h-23">
+          <div className="whitespace-pre-wrap wrap-break-word rounded-md font-mono text-sm sm:text-base leading-7">
+            {phrase.split("").map((char, index) => (
+              <span
+                key={`${char}-${index}`}
+                className={`inline-block rounded px-0.5 transition-all duration-150 ${
+                  index === currentCharIndex && status !== "finished" ? "animate-pulse" : ""
+                } ${charClassName(getCharState(index))}`}
+              >
+                {char}
+              </span>
+            ))}
+          </div>
         </div>
 
         <input
@@ -206,7 +252,7 @@ export default function TypingGameSection() {
           }}
           placeholder="Start typing here..."
           disabled={status === "finished"}
-          className="w-full rounded-lg border border-border bg-background/60 px-4 py-4 text-lg outline-none focus:ring-2 focus:ring-ring"
+          className="w-full rounded-lg border border-border bg-background/45 px-4 py-4 text-lg outline-none focus:ring-2 focus:ring-ring"
         />
 
         {isInputFocused ? (
@@ -222,46 +268,49 @@ export default function TypingGameSection() {
         ) : null}
       </div>
 
-      {isResultOpen ? (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-zinc-950/90 p-6 space-y-4 shadow-2xl">
-            <h2 className="text-xl font-semibold">Typing Complete</h2>
-            <p className="text-sm text-muted-foreground">
-              WPM: <span className="font-semibold text-foreground">{wpm}</span> • Accuracy:{" "}
-              <span className="font-semibold text-foreground">{accuracy}%</span>
-            </p>
+      {mounted && isResultOpen
+        ? createPortal(
+            <div className="fixed inset-0 z-120 bg-black/55 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="w-full max-w-md rounded-2xl border border-border bg-popover/95 text-popover-foreground p-6 space-y-4 shadow-[0_26px_70px_-30px_rgba(0,0,0,0.5)] dark:shadow-[0_26px_70px_-30px_rgba(0,0,0,0.7)]">
+                <h2 className="text-xl font-semibold">Typing Complete</h2>
+                <p className="text-sm text-muted-foreground">
+                  WPM: <span className="font-semibold text-foreground">{wpm}</span> • Accuracy:{" "}
+                  <span className="font-semibold text-foreground">{accuracy}%</span>
+                </p>
 
-            <div className="space-y-2">
-              <label htmlFor="typing-preview-username" className="text-sm text-muted-foreground">
-                Username
-              </label>
-              <input
-                id="typing-preview-username"
-                value={username}
-                maxLength={24}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="anonymous"
-                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
-              />
-            </div>
+                <div className="space-y-2">
+                  <label htmlFor="typing-preview-username" className="text-sm text-muted-foreground">
+                    Username
+                  </label>
+                  <input
+                    id="typing-preview-username"
+                    value={username}
+                    maxLength={24}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="anonymous"
+                    className="w-full rounded-lg border border-border bg-background/70 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </div>
 
-            {error ? <p className="text-xs text-red-400">{error}</p> : null}
-            {submitted ? <p className="text-xs text-emerald-400">Score submitted successfully.</p> : null}
+                {error ? <p className="text-xs text-red-400">{error}</p> : null}
+                {submitted ? <p className="text-xs text-emerald-400">Score submitted successfully.</p> : null}
 
-            <div className="flex flex-wrap gap-2">
-              <Button type="button" onClick={submitScore} disabled={submitting || submitted} className="cursor-pointer">
-                {submitting ? "Submitting..." : submitted ? "Submitted" : "Submit Score"}
-              </Button>
-              <Button type="button" asChild variant="outline" className="cursor-pointer">
-                <Link href="/typing/leaderboard">View Leaderboard</Link>
-              </Button>
-              <Button type="button" variant="ghost" onClick={restart} className="cursor-pointer">
-                Play Again
-              </Button>
-            </div>
-          </div>
-        </div>
-      ) : null}
+                <div className="flex flex-wrap gap-2">
+                  <Button type="button" onClick={submitScore} disabled={submitting || submitted} className="cursor-pointer">
+                    {submitting ? "Submitting..." : submitted ? "Submitted" : "Submit Score"}
+                  </Button>
+                  <Button type="button" asChild variant="outline" className="cursor-pointer">
+                    <Link href="/typing/leaderboard">View Leaderboard</Link>
+                  </Button>
+                  <Button type="button" variant="ghost" onClick={restart} className="cursor-pointer">
+                    Play Again
+                  </Button>
+                </div>
+              </div>
+            </div>,
+            document.body
+          )
+        : null}
     </div>
   );
 }

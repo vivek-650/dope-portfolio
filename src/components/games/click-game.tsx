@@ -15,6 +15,7 @@ export default function ClickGame() {
   const [status, setStatus] = useState<GameStatus>("idle");
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION_SECONDS);
   const [clicks, setClicks] = useState(0);
+  const [durationMs, setDurationMs] = useState(GAME_DURATION_SECONDS * 1000);
   const [username, setUsername] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -22,6 +23,7 @@ export default function ClickGame() {
 
   const timeoutRef = useRef<number | null>(null);
   const countdownRef = useRef<number | null>(null);
+  const startedAtRef = useRef<number | null>(null);
 
   const isModalOpen = status === "finished";
 
@@ -29,17 +31,21 @@ export default function ClickGame() {
     setStatus("idle");
     setTimeLeft(GAME_DURATION_SECONDS);
     setClicks(0);
+    setDurationMs(GAME_DURATION_SECONDS * 1000);
     setSubmitting(false);
     setSubmitted(false);
     setError(null);
+    startedAtRef.current = null;
   }, []);
 
   const startGame = useCallback(() => {
     setStatus("running");
     setTimeLeft(GAME_DURATION_SECONDS);
     setClicks(0);
+    setDurationMs(GAME_DURATION_SECONDS * 1000);
     setSubmitted(false);
     setError(null);
+    startedAtRef.current = performance.now();
 
     if (countdownRef.current) {
       window.clearInterval(countdownRef.current);
@@ -52,6 +58,11 @@ export default function ClickGame() {
             window.clearInterval(countdownRef.current);
             countdownRef.current = null;
           }
+
+          if (startedAtRef.current) {
+            setDurationMs(Math.max(1, Math.round(performance.now() - startedAtRef.current)));
+          }
+
           setStatus("finished");
           return 0;
         }
@@ -91,6 +102,14 @@ export default function ClickGame() {
     return normalized.length > 0 ? normalized.slice(0, 24) : "anonymous";
   }, [username]);
 
+  const cps = useMemo(() => {
+    if (durationMs <= 0 || clicks <= 0) {
+      return 0;
+    }
+
+    return Number(((clicks * 1000) / durationMs).toFixed(2));
+  }, [clicks, durationMs]);
+
   const handleSubmit = async () => {
     if (submitted || submitting) {
       return;
@@ -107,6 +126,7 @@ export default function ClickGame() {
           gameType: "click",
           username: safeUsername,
           score: clicks,
+          durationMs,
         }),
       });
 
@@ -184,7 +204,9 @@ export default function ClickGame() {
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="w-full max-w-md rounded-2xl border border-white/10 bg-zinc-950/90 p-6 space-y-4 shadow-2xl">
             <h2 className="text-xl font-semibold">Round Complete</h2>
-            <p className="text-sm text-muted-foreground">Your click score: <span className="font-semibold text-foreground">{clicks}</span></p>
+            <p className="text-sm text-muted-foreground">
+              {clicks} clicks in {(durationMs / 1000).toFixed(2)}s • {cps.toFixed(2)} cps
+            </p>
 
             <div className="space-y-2">
               <label htmlFor="click-username" className="text-sm text-muted-foreground">Username</label>

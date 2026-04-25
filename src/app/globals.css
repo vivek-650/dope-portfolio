@@ -244,3 +244,15 @@
   }
 
 }
+
+@layer base {
+  ::selection {
+    background: rgba(0, 170, 255, 0.18);
+    color: inherit;
+  }
+
+  .dark ::selection {
+    background: rgba(0, 208, 255, 0.385);
+    color: inherit;
+  }
+}

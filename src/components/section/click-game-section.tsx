@@ -5,6 +5,7 @@ import { RippleButton } from "@/components/ui/ripple-button";
 import { Maximize2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 const DURATION_MS = 5000;
 
@@ -14,10 +15,12 @@ export default function ClickGameSection() {
   const [status, setStatus] = useState<Status>("idle");
   const [clicks, setClicks] = useState(0);
   const [remaining, setRemaining] = useState(5);
+  const [durationMs, setDurationMs] = useState(DURATION_MS);
   const [username, setUsername] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   const startRef = useRef<number | null>(null);
   const frameRef = useRef<number | null>(null);
@@ -30,12 +33,24 @@ export default function ClickGameSection() {
     return normalized.length > 0 ? normalized.slice(0, 24) : "anonymous";
   }, [username]);
 
+  const cps = useMemo(() => {
+    if (durationMs <= 0 || clicks <= 0) {
+      return 0;
+    }
+
+    return Number(((clicks * 1000) / durationMs).toFixed(2));
+  }, [clicks, durationMs]);
+
   const stop = () => {
     if (frameRef.current) {
       window.cancelAnimationFrame(frameRef.current);
       frameRef.current = null;
     }
   };
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const tick = (timestamp: number) => {
     if (!startRef.current) {
@@ -47,6 +62,7 @@ export default function ClickGameSection() {
     setRemaining(Number((left / 1000).toFixed(2)));
 
     if (left <= 0) {
+      setDurationMs(Math.max(1, Math.round(elapsed)));
       setStatus("finished");
       stop();
       return;
@@ -60,6 +76,7 @@ export default function ClickGameSection() {
     setStatus("idle");
     setClicks(0);
     setRemaining(5);
+    setDurationMs(DURATION_MS);
     setUsername("");
     setSubmitting(false);
     setSubmitted(false);
@@ -93,6 +110,7 @@ export default function ClickGameSection() {
       setSubmitted(false);
       setError(null);
       setClicks(1);
+      setDurationMs(DURATION_MS);
       return;
     }
 
@@ -115,6 +133,7 @@ export default function ClickGameSection() {
           gameType: "click",
           username: safeUsername,
           score: clicks,
+          durationMs,
         }),
       });
 
@@ -138,7 +157,7 @@ export default function ClickGameSection() {
   };
 
   return (
-    <div className="rounded-xl border border-white/10 bg-card/30 backdrop-blur-xl p-4 sm:p-6 shadow-[0_20px_60px_-35px_rgba(0,0,0,0.8)] relative overflow-hidden">
+    <div className="rounded-xl border border-white/10 bg-card/30 backdrop-blur-xl p-4 sm:p-6 shadow-[0_12px_34px_-24px_rgba(0,0,0,0.45)] relative overflow-hidden">
       <Button
         asChild
         size="sm"
@@ -151,27 +170,31 @@ export default function ClickGameSection() {
       </Button>
 
       <div className="space-y-3">
-        <div className="flex items-center justify-between gap-3">
-          <p className="text-lg text-muted-foreground font-medium pr-14">Click as many times as possible in 5 seconds.</p>
-
+        <div className="flex items-center justify-between gap-3 pr-14">
+          <p className="text-base text-muted-foreground font-medium">5-second click sprint. Build rhythm and explode your score.</p>
         </div>
+
+        
 
         <RippleButton
           type="button"
           onClick={onClick}
           rippleColor="#34d399"
           duration="500ms"
-          className="w-full h-24 rounded-lg border border-border bg-background/60 text-lg font-semibold transition-all cursor-pointer hover:bg-background/80 active:scale-[0.99]"
+          className="w-full h-28 rounded-2xl border border-border bg-background/60 text-lg font-semibold transition-all cursor-pointer hover:from-emerald-500/30 hover:to-cyan-500/25 active:scale-[0.99]"
         >
           {status === "finished" ? "Finished" : "Click Here"}
         </RippleButton>
 
         {status !== "idle" ? (
-          <div className="mt-2 flex items-center justify-between text-sm text-muted-foreground">
-            <p>
-              Score: <span className="font-semibold text-foreground tabular-nums">{clicks}</span>
-            </p>
-            <p className="font-mono tabular-nums">{remaining.toFixed(2)}</p>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-muted-foreground">
+              Score{" "}
+              <span className="font-semibold text-foreground tabular-nums ml-1">{clicks}</span>
+            </div>
+            <div className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-right text-sm text-muted-foreground">
+              <span className="font-mono tabular-nums text-foreground">{remaining.toFixed(2)}s</span>
+            </div>
           </div>
         ) : null}
 
@@ -186,45 +209,48 @@ export default function ClickGameSection() {
         ) : null}
       </div>
 
-      {isResultOpen ? (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-zinc-950/90 p-6 space-y-4 shadow-2xl">
-            <h2 className="text-xl font-semibold">Round Complete</h2>
-            <p className="text-sm text-muted-foreground">
-              Your click score: <span className="font-semibold text-foreground">{clicks}</span>
-            </p>
+      {mounted && isResultOpen
+        ? createPortal(
+            <div className="fixed inset-0 z-120 bg-black/55 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="w-full max-w-md rounded-2xl border border-border bg-popover/95 text-popover-foreground p-6 space-y-4 shadow-[0_26px_70px_-30px_rgba(0,0,0,0.5)] dark:shadow-[0_26px_70px_-30px_rgba(0,0,0,0.7)]">
+                <h2 className="text-xl font-semibold">Round Complete</h2>
+                <p className="text-sm text-muted-foreground">
+                  {clicks} clicks in {(durationMs / 1000).toFixed(2)}s • {cps.toFixed(2)} cps
+                </p>
 
-            <div className="space-y-2">
-              <label htmlFor="click-preview-username" className="text-sm text-muted-foreground">
-                Username
-              </label>
-              <input
-                id="click-preview-username"
-                value={username}
-                maxLength={24}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="anonymous"
-                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
-              />
-            </div>
+                <div className="space-y-2">
+                  <label htmlFor="click-preview-username" className="text-sm text-muted-foreground">
+                    Username
+                  </label>
+                  <input
+                    id="click-preview-username"
+                    value={username}
+                    maxLength={24}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="anonymous"
+                    className="w-full rounded-lg border border-border bg-background/70 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </div>
 
-            {error ? <p className="text-xs text-red-400">{error}</p> : null}
-            {submitted ? <p className="text-xs text-emerald-400">Score submitted successfully.</p> : null}
+                {error ? <p className="text-xs text-red-400">{error}</p> : null}
+                {submitted ? <p className="text-xs text-emerald-400">Score submitted successfully.</p> : null}
 
-            <div className="flex flex-wrap gap-2">
-              <Button type="button" onClick={submitScore} disabled={submitting || submitted} className="cursor-pointer">
-                {submitting ? "Submitting..." : submitted ? "Submitted" : "Submit Score"}
-              </Button>
-              <Button type="button" asChild variant="outline" className="cursor-pointer">
-                <Link href="/click/leaderboard">View Leaderboard</Link>
-              </Button>
-              <Button type="button" variant="ghost" onClick={restart} className="cursor-pointer">
-                Play Again
-              </Button>
-            </div>
-          </div>
-        </div>
-      ) : null}
+                <div className="flex flex-wrap gap-2">
+                  <Button type="button" onClick={submitScore} disabled={submitting || submitted} className="cursor-pointer">
+                    {submitting ? "Submitting..." : submitted ? "Submitted" : "Submit Score"}
+                  </Button>
+                  <Button type="button" asChild variant="outline" className="cursor-pointer">
+                    <Link href="/click/leaderboard">View Leaderboard</Link>
+                  </Button>
+                  <Button type="button" variant="ghost" onClick={restart} className="cursor-pointer">
+                    Play Again
+                  </Button>
+                </div>
+              </div>
+            </div>,
+            document.body
+          )
+        : null}
     </div>
   );
 }

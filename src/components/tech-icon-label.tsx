@@ -10,6 +10,7 @@ const TECH_ICON_MAP: Record<string, string> = {
   "react": "/Techicons/react/react-original.svg",
   "react.js": "/Techicons/react/react-original.svg",
   "next.js": "/Techicons/nextjs/nextjs-original.svg",
+  "fastapi": "/Techicons/fastapi/fastapi-original.svg",
   "redux": "/Techicons/redux/redux-original.svg",
   "tailwind css": "/Techicons/tailwindcss/tailwindcss-original.svg",
   "framer motion": "/Techicons/framermotion/framermotion-original.svg",
