@@ -20,6 +20,8 @@ export default function Footer() {
 
   useEffect(() => {
     let isMounted = true;
+    let retryTimer: number | undefined;
+    let attempt = 0;
 
     const loadVisitors = async () => {
       try {
@@ -36,9 +38,22 @@ export default function Footer() {
 
         if (isMounted && typeof data.visitors === "number") {
           setVisitors(data.visitors);
+          return;
+        }
+
+        if (isMounted && attempt < 3) {
+          attempt += 1;
+          retryTimer = window.setTimeout(() => {
+            void loadVisitors();
+          }, 1200 * attempt);
         }
       } catch {
-        // Keep silent fallback if Umami API is unavailable.
+        if (isMounted && attempt < 3) {
+          attempt += 1;
+          retryTimer = window.setTimeout(() => {
+            void loadVisitors();
+          }, 1200 * attempt);
+        }
       }
     };
 
@@ -46,6 +61,9 @@ export default function Footer() {
 
     return () => {
       isMounted = false;
+      if (retryTimer !== undefined) {
+        window.clearTimeout(retryTimer);
+      }
     };
   }, []);
 
