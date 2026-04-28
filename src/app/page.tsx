@@ -31,6 +31,7 @@ const BLUR_FADE_DELAY = 0.04;
 
 export default function Page() {
   const [snakeActive, setSnakeActive] = useState(false);
+  const [isReadMoreOpen, setIsReadMoreOpen] = useState(false);
   const { showNeko, setShowNeko } = useNeko();
   const isSnakeTriggerLocked = showNeko;
 
@@ -172,14 +173,38 @@ export default function Page() {
               </p>
 
               {remainingSummaryParagraphs && (
-                <details className="mt-2 group">
-                  <summary className="cursor-pointer text-sm font-medium text-foreground/90 marker:text-muted-foreground">
-                    Read more
-                  </summary>
-                  <div className="mt-3">
-                    <Markdown>{remainingSummaryParagraphs}</Markdown>
+                <div className="mt-4">
+                  <button
+                    onClick={() => setIsReadMoreOpen(!isReadMoreOpen)}
+                    className="inline-flex items-center gap-2 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground group"
+                  >
+                    <span>Read more</span>
+                    <svg
+                      className={`h-4 w-4 transition-transform duration-300 ease-out ${
+                        isReadMoreOpen ? "rotate-180" : ""
+                      }`}
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+                  
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ease-out ${
+                      isReadMoreOpen ? "max-h-250 opacity-100 mt-3" : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <div className="prose dark:prose-invert prose-sm text-muted-foreground">
+                      <Markdown>{remainingSummaryParagraphs}</Markdown>
+                    </div>
                   </div>
-                </details>
+                </div>
               )}
             </div>
           </BlurFade>
@@ -206,8 +231,8 @@ export default function Page() {
       </section>
 
       {!showNeko && (
-        <div className="text-xs text-muted-foreground/8">
-          someone is scared help...
+        <div className="text-xs text-muted-foreground/12">
+          click here to see a surprise ↓
         </div>
       )}
 
@@ -221,9 +246,9 @@ export default function Page() {
                   setSnakeActive(true);
                 }
               }}
-              className={`text-xl font-bold transition-opacity ${isSnakeTriggerLocked ? "cursor-not-allowed opacity-55" : "cursor-pointer hover:opacity-70"}`}
+              className={`inline-flex items-center gap-2 text-xl font-bold transition-opacity ${isSnakeTriggerLocked ? "cursor-not-allowed opacity-55" : "cursor-pointer hover:opacity-70"}`}
             >
-              Speed Games
+                            Speed Games
             </h2>
           </BlurFade>
 
