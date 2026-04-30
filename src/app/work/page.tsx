@@ -1,11 +1,10 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DATA } from "@/data/resume";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { DATA, getWorkStatusBadge } from "@/data/resume";
 import { TechIconLabel } from "@/components/tech-icon-label";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -27,10 +26,6 @@ function getIntro(description: string) {
 }
 
 export default function WorkPage() {
-  const latestCompany =
-    DATA.work.find((item) => item.end === "Present")?.company ??
-    DATA.work[0]?.company;
-
   return (
     <main className="min-h-dvh flex flex-col gap-10 relative">
       <section className="space-y-4">
@@ -56,6 +51,7 @@ export default function WorkPage() {
         {DATA.work.map((work, index) => {
           const highlights = getHighlights(work.description);
           const intro = getIntro(work.description);
+          const statusBadge = getWorkStatusBadge(index);
 
           return (
             <BlurFade key={work.company} delay={BLUR_FADE_DELAY * 3 + index * 0.08}>
@@ -64,25 +60,14 @@ export default function WorkPage() {
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-semibold text-xs inline-flex items-center gap-1">
-                        <span
-                          className={cn(
-                            work.company === latestCompany &&
-                              "blur-[6px] select-none"
-                          )}
-                        >
-                          {work.company}
-                        </span>
+                        {work.company}
                       </span>
-                      {work.badges.length > 0 && (
-                        <Badge className="bg-emerald-600/20 text-emerald-300 border border-emerald-500/40 rounded-md">
-                          {work.badges[0] === "Current" ? "Working" : work.badges[0]}
-                        </Badge>
-                      )}
+                      {statusBadge && <Badge className={statusBadge.className}>{statusBadge.label}</Badge>}
                     </div>
                     <p className="text-xs text-muted-foreground">{work.title}</p>
                   </div>
                   <div className="text-sm text-muted-foreground text-left sm:text-right">
-                    <p>{work.start} - {work.end ?? "Present"}</p>
+                    <p>{work.start} - {work.end}</p>
                     <p>{work.location}</p>
                   </div>
                 </div>

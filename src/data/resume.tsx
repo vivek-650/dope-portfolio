@@ -59,9 +59,7 @@ export const DATA = {
       ],
     },
   ],
-  navbar: [
-    { href: "/", icon: HomeIcon, label: "Home" },
-  ],
+  navbar: [{ href: "/", icon: HomeIcon, label: "Home" }],
   contact: {
     email: "curiousvivek.contact@gmail.com",
     tel: "+917856039243",
@@ -72,34 +70,30 @@ export const DATA = {
         icon: Icons.github,
         navbar: true,
       },
-
       LinkedIn: {
         name: "LinkedIn",
         url: "https://linkedin.com/in/curiousvivek",
         icon: Icons.linkedin,
-
         navbar: true,
       },
       email: {
         name: "Send Email",
         url: "mailto:curiousvivek.contact@gmail.com",
         icon: Icons.email,
-
         navbar: true,
       },
     },
   },
-
   work: [
     {
-      company: "Haha Nice Try :)",
+      company: "Waegoo",
       href: "https://linkedin.com/in/curiousvivek",
-      badges: ["Current"],
+      badges: [],
       location: "India",
       title: "Software Developer Intern",
       logoUrl: "",
       start: "Jan 2026",
-      end: "Present",
+      end: "Apr 2026",
       technologies: [
         "Next.js",
         "TypeScript",
@@ -197,14 +191,7 @@ export const DATA = {
       active: true,
       description:
         "Retrieval-augmented AI assistant designed to let users query knowledge across long-form, multi-format content with high relevance.\n\n- Built a full RAG pipeline for PDFs, websites, and YouTube transcripts using semantic chunking and embeddings.\n- Implemented vector search with Qdrant and context orchestration via LangChain for low-latency answers.\n- Structured the system for scale with modular ingestion, indexing, and retrieval layers.",
-      technologies: [
-        "Next.js",
-        "LangChain",
-        "OpenAI",
-        "Qdrant",
-        "Clerk",
-        "TypeScript",
-      ],
+      technologies: ["Next.js", "LangChain", "OpenAI", "Qdrant", "Clerk", "TypeScript"],
       links: [
         {
           type: "Live",
@@ -222,13 +209,7 @@ export const DATA = {
       active: true,
       description:
         "MERN-powered EdTech platform focused on delivering role-aware learning experiences for students, mentors, and admins.\n\n- Built authentication, authorization, and role-based access control for secure feature segmentation.\n- Designed full-stack modules for content delivery, progress tracking, and user management.\n- Shipped a practical product architecture emphasizing maintainability and extensibility.",
-      technologies: [
-        "MongoDB",
-        "Express.js",
-        "React.js",
-        "Node.js",
-        "Mongoose",
-      ],
+      technologies: ["MongoDB", "Express.js", "React.js", "Node.js", "Mongoose"],
       links: [
         {
           type: "Live",
@@ -242,3 +223,24 @@ export const DATA = {
   ],
   hackathons: [],
 } as const;
+
+export const WORK_STATUS = {
+  working: {
+    label: "Working",
+    className: "bg-emerald-600/20 text-emerald-300 border border-emerald-500/40 rounded-md",
+  },
+  recent: {
+    label: "Recent",
+    className: "bg-muted/70 text-muted-foreground border border-border rounded-md",
+  },
+} as const;
+
+export function getWorkStatusBadge(index: number) {
+  const activeWorkIndex = DATA.work.findIndex((item) => item.end.toLowerCase() === "present");
+
+  if (activeWorkIndex !== -1) {
+    return index === activeWorkIndex ? WORK_STATUS.working : null;
+  }
+
+  return index === 0 ? WORK_STATUS.recent : null;
+}
