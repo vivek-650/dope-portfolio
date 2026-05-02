@@ -11,6 +11,7 @@ import Footer from "@/components/footer";
 import { NekoProvider, useNeko } from "@/context/neko-context";
 import type { ReactNode } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
+import VisitorMilestoneDialog from "@/components/celebration/visitor-milestone-dialog";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -35,6 +36,7 @@ function AppContent({ children }: { children: ReactNode }) {
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
         <TooltipProvider delayDuration={0}>
           <Navbar />
+          <VisitorMilestoneDialog />
           
           {/* 🔥 Background Effect */}
           <div className="absolute inset-0 top-0 left-0 right-0 h-25 overflow-hidden z-0">
