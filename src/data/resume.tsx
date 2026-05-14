@@ -185,6 +185,24 @@ export const DATA = {
       video: "",
     },
     {
+      title: "Playlix",
+      href: "https://playlix-beta.vercel.app/",
+      dates: "2026",
+      active: true,
+      description:
+        "Convert playlists into structured content and track progress automatically. Users can import YouTube playlists, and the system generates a learning path with progress tracking and recommendations.",
+      technologies: ["TypeScript","Next.js", "Supabase", "Prisma", "YouTube Data API V3"],
+      links: [
+        {
+          type: "Live",
+          href: "https://playlix-beta.vercel.app/",
+          icon: <Icons.globe className="size-3" />,
+        },
+      ],
+      image: "",
+      video: "",
+    },
+    {
       title: "Askly AI",
       href: "https://shorturl.at/RDQ0R",
       dates: "2025",
