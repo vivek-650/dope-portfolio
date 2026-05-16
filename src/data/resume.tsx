@@ -181,7 +181,7 @@ export const DATA = {
           icon: <Icons.globe className="size-3" />,
         },
       ],
-      image: "",
+      image: "/samvad.jpeg",
       video: "",
     },
     {
@@ -199,7 +199,7 @@ export const DATA = {
           icon: <Icons.globe className="size-3" />,
         },
       ],
-      image: "",
+      image: "/playlix.jpeg",
       video: "",
     },
     {
