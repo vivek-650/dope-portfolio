@@ -64,6 +64,12 @@ export const DATA = {
     email: "curiousvivek.contact@gmail.com",
     tel: "+917856039243",
     social: {
+      Twitter: {
+        name: "Twitter",
+        url: "https://x.com/curious__Anand",
+        icon: Icons.x,
+        navbar: true,
+      },
       GitHub: {
         name: "GitHub",
         url: "https://github.com/vivek-650",
