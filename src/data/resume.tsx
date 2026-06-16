@@ -209,6 +209,28 @@ export const DATA = {
       video: "",
     },
     {
+      title: "Seolytics",
+      href: "https://seolytics.vercel.app/",
+      dates: "2026",
+      active: true,
+      description:
+        "AI-powered SEO analytics tool that provides actionable insights for content optimization. Users can connect their website and receive AI-driven recommendations for improving search rankings, along with keyword tracking and competitor analysis.",
+      technologies: [
+        "Next.js",
+        "TypeScript",
+        "powerSEO"
+      ],
+      links: [
+        {
+          type: "Live",
+          href: "https://seolytics.vercel.app/",
+          icon: <Icons.globe className="size-3" />,
+        },
+      ],
+      image: "/alter.jpg",
+      video: "",
+    },
+    {
       title: "Askly AI",
       href: "https://shorturl.at/RDQ0R",
       dates: "2025",
