@@ -1,11 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import type { GameType } from "@/lib/game-types";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-
-type GameType = "click" | "typing" | "aimlab";
 
 type LeaderboardEntry = {
   username: string;
@@ -20,6 +19,17 @@ type LeaderboardEntry = {
 
 type Props = {
   gameType: GameType;
+};
+
+const GAME_META: Record<GameType, { title: string; subtitle: string; playHref: string }> = {
+  click: { title: "Click", subtitle: "Top 10 by time-weighted speed score", playHref: "/click" },
+  typing: { title: "Typing", subtitle: "Top 10 players", playHref: "/typing" },
+  aimlab: { title: "AimLab", subtitle: "Top 10 AimLab scores", playHref: "/aimlab" },
+  colormatch: {
+    title: "Color Match",
+    subtitle: "Top 10 closest color matches",
+    playHref: "/color-match",
+  },
 };
 
 export default function LeaderboardClient({ gameType }: Props) {
@@ -79,19 +89,13 @@ export default function LeaderboardClient({ gameType }: Props) {
         <div className="flex items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">
-              {gameType === "click" ? "Click" : gameType === "typing" ? "Typing" : "AimLab"} Leaderboard
+              {GAME_META[gameType].title} Leaderboard
             </h1>
-            <p className="text-sm text-muted-foreground">
-              {gameType === "click"
-                ? "Top 10 by time-weighted speed score"
-                : gameType === "typing"
-                  ? "Top 10 players"
-                  : "Top 10 AimLab scores"}
-            </p>
+            <p className="text-sm text-muted-foreground">{GAME_META[gameType].subtitle}</p>
           </div>
 
           <Button asChild variant="outline" className="cursor-pointer">
-            <Link href={gameType === "click" ? "/click" : gameType === "typing" ? "/typing" : "/aimlab"}>Play Game</Link>
+            <Link href={GAME_META[gameType].playHref}>Play Game</Link>
           </Button>
         </div>
 
@@ -156,6 +160,12 @@ export default function LeaderboardClient({ gameType }: Props) {
                       <p className="text-xs text-muted-foreground">
                         {row.accuracy !== null ? `Accuracy ${row.accuracy}%` : "Accuracy -"}
                       </p>
+                    ) : gameType === "colormatch" ? (
+                      <p className="text-xs text-muted-foreground">
+                        {row.score !== null ? `Match ${row.score}%` : "Match -"}
+                        {" • "}
+                        {(row.duration_ms ?? 0) > 0 ? `${((row.duration_ms ?? 0) / 1000).toFixed(0)}s` : "-"}
+                      </p>
                     ) : (
                       <p className="text-xs text-muted-foreground">
                         {row.accuracy !== null ? `Accuracy ${row.accuracy}%` : "Accuracy -"}
@@ -166,10 +176,20 @@ export default function LeaderboardClient({ gameType }: Props) {
                   </div>
                   <div className="text-right">
                     <span className="font-semibold tabular-nums">
-                      {gameType === "click" ? row.leaderboard_score ?? 0 : gameType === "typing" ? row.wpm ?? 0 : row.score ?? 0}
+                      {gameType === "click"
+                        ? row.leaderboard_score ?? 0
+                        : gameType === "typing"
+                          ? row.wpm ?? 0
+                          : row.score ?? 0}
                     </span>
                     <p className="text-xs text-muted-foreground">
-                      {gameType === "click" ? "speed score" : gameType === "typing" ? "wpm" : "points"}
+                      {gameType === "click"
+                        ? "speed score"
+                        : gameType === "typing"
+                          ? "wpm"
+                          : gameType === "colormatch"
+                            ? "match score"
+                            : "points"}
                     </p>
                   </div>
                 </div>

@@ -73,7 +73,7 @@ export async function ensureGameScoresTable() {
           ) THEN
             ALTER TABLE game_scores
             ADD CONSTRAINT game_scores_game_type_check
-            CHECK (game_type IN ('click', 'typing', 'aimlab'));
+            CHECK (game_type IN ('click', 'typing', 'aimlab', 'colormatch'));
           END IF;
         END
         $$;
@@ -97,6 +97,11 @@ export async function ensureGameScoresTable() {
       await query(`
         CREATE INDEX IF NOT EXISTS idx_game_scores_aimlab
         ON game_scores (game_type, score DESC, accuracy DESC, created_at ASC);
+      `);
+
+      await query(`
+        CREATE INDEX IF NOT EXISTS idx_game_scores_colormatch
+        ON game_scores (game_type, score DESC, duration_ms ASC, created_at ASC);
       `);
     })();
   }

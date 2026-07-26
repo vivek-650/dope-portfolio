@@ -1,7 +1,6 @@
 import { ensureGameScoresTable, query } from "@/lib/db";
+import { normalizeGameType, type GameType } from "@/lib/game-types";
 import { NextRequest, NextResponse } from "next/server";
-
-type GameType = "click" | "typing" | "aimlab";
 
 type LeaderboardRow = {
   username: string;
@@ -31,14 +30,6 @@ const FAKE_USERS = [
   "ShiftMaster",
   "PulsePilot",
 ];
-
-function normalizeGameType(value: string | null): GameType | null {
-  if (value === "click" || value === "typing" || value === "aimlab") {
-    return value;
-  }
-
-  return null;
-}
 
 function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -82,6 +73,22 @@ function fakeEntry(gameType: GameType, index: number): LeaderboardRow {
     };
   }
 
+  if (gameType === "colormatch") {
+    const score = getRandomInt(40, 99);
+    const durationMs = getRandomInt(8000, 45000);
+
+    return {
+      username,
+      score,
+      wpm: null,
+      accuracy: score,
+      duration_ms: durationMs,
+      cps: null,
+      leaderboard_score: score,
+      created_at: new Date().toISOString(),
+    };
+  }
+
   return {
     username,
     score: null,
@@ -94,68 +101,83 @@ function fakeEntry(gameType: GameType, index: number): LeaderboardRow {
   };
 }
 
+const LEADERBOARD_QUERIES: Record<GameType, string> = {
+  click: `
+    SELECT
+      username,
+      score,
+      wpm,
+      NULL::INTEGER AS accuracy,
+      duration_ms,
+      ROUND((score::NUMERIC * 1000) / GREATEST(duration_ms, 1), 2) AS cps,
+      ROUND((score::NUMERIC * score::NUMERIC * 1000) / GREATEST(duration_ms, 1), 0)::INTEGER AS leaderboard_score,
+      created_at
+    FROM game_scores
+    WHERE game_type = 'click' AND score IS NOT NULL AND duration_ms IS NOT NULL
+    ORDER BY leaderboard_score DESC NULLS LAST, cps DESC NULLS LAST, duration_ms ASC, created_at ASC
+    LIMIT 10;
+  `,
+  typing: `
+    SELECT
+      username,
+      score,
+      wpm,
+      accuracy,
+      NULL::INTEGER AS duration_ms,
+      NULL::NUMERIC AS cps,
+      NULL::INTEGER AS leaderboard_score,
+      created_at
+    FROM game_scores
+    WHERE game_type = 'typing'
+    ORDER BY wpm DESC NULLS LAST, created_at ASC
+    LIMIT 10;
+  `,
+  aimlab: `
+    SELECT
+      username,
+      score,
+      NULL::INTEGER AS wpm,
+      accuracy,
+      duration_ms,
+      ROUND((score::NUMERIC * 1000) / GREATEST(duration_ms, 1), 2) AS cps,
+      score::INTEGER AS leaderboard_score,
+      created_at
+    FROM game_scores
+    WHERE game_type = 'aimlab' AND score IS NOT NULL
+    ORDER BY score DESC NULLS LAST, accuracy DESC NULLS LAST, duration_ms ASC NULLS LAST, created_at ASC
+    LIMIT 10;
+  `,
+  colormatch: `
+    SELECT
+      username,
+      score,
+      NULL::INTEGER AS wpm,
+      accuracy,
+      duration_ms,
+      NULL::NUMERIC AS cps,
+      score::INTEGER AS leaderboard_score,
+      created_at
+    FROM game_scores
+    WHERE game_type = 'colormatch' AND score IS NOT NULL
+    ORDER BY score DESC NULLS LAST, duration_ms ASC NULLS LAST, created_at ASC
+    LIMIT 10;
+  `,
+};
+
 export async function GET(request: NextRequest) {
   try {
     const game = normalizeGameType(request.nextUrl.searchParams.get("game"));
 
     if (!game) {
       return NextResponse.json(
-        { success: false, error: "Missing or invalid game query. Use click, typing, or aimlab." },
+        { success: false, error: "Missing or invalid game query. Use click, typing, aimlab, or colormatch." },
         { status: 400 }
       );
     }
 
     await ensureGameScoresTable();
 
-    const rows = await query<LeaderboardRow>(
-      game === "click"
-        ? `
-          SELECT
-            username,
-            score,
-            wpm,
-            NULL::INTEGER AS accuracy,
-            duration_ms,
-            ROUND((score::NUMERIC * 1000) / GREATEST(duration_ms, 1), 2) AS cps,
-            ROUND((score::NUMERIC * score::NUMERIC * 1000) / GREATEST(duration_ms, 1), 0)::INTEGER AS leaderboard_score,
-            created_at
-          FROM game_scores
-          WHERE game_type = 'click' AND score IS NOT NULL AND duration_ms IS NOT NULL
-          ORDER BY leaderboard_score DESC NULLS LAST, cps DESC NULLS LAST, duration_ms ASC, created_at ASC
-          LIMIT 10;
-        `
-        : game === "typing"
-          ? `
-          SELECT
-            username,
-            score,
-            wpm,
-            accuracy,
-            NULL::INTEGER AS duration_ms,
-            NULL::NUMERIC AS cps,
-            NULL::INTEGER AS leaderboard_score,
-            created_at
-          FROM game_scores
-          WHERE game_type = 'typing'
-          ORDER BY wpm DESC NULLS LAST, created_at ASC
-          LIMIT 10;
-        `
-          : `
-          SELECT
-            username,
-            score,
-            NULL::INTEGER AS wpm,
-            accuracy,
-            duration_ms,
-            ROUND((score::NUMERIC * 1000) / GREATEST(duration_ms, 1), 2) AS cps,
-            score::INTEGER AS leaderboard_score,
-            created_at
-          FROM game_scores
-          WHERE game_type = 'aimlab' AND score IS NOT NULL
-          ORDER BY score DESC NULLS LAST, accuracy DESC NULLS LAST, duration_ms ASC NULLS LAST, created_at ASC
-          LIMIT 10;
-        `
-    );
+    const rows = await query<LeaderboardRow>(LEADERBOARD_QUERIES[game]);
 
     const leaderboard = [...rows];
 

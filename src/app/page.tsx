@@ -22,6 +22,10 @@ const AimLabGameSection = dynamic(
   () => import("@/components/section/aimlab-game-section"),
   { ssr: false },
 );
+const ColorMatchGameSection = dynamic(
+  () => import("@/components/section/color-match-game-section"),
+  { ssr: false },
+);
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -234,8 +238,12 @@ export default function Page() {
             <TypingGameSection />
           </BlurFade>
 
-          <BlurFade delay={BLUR_FADE_DELAY * 10}>
+          {/* <BlurFade delay={BLUR_FADE_DELAY * 10}>
             <AimLabGameSection />
+          </BlurFade> */}
+
+          <BlurFade delay={BLUR_FADE_DELAY * 10}>
+            <ColorMatchGameSection />
           </BlurFade>
         </div>
       </section>

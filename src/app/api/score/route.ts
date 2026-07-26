@@ -1,7 +1,6 @@
 import { ensureGameScoresTable, query } from "@/lib/db";
+import { normalizeGameType } from "@/lib/game-types";
 import { NextRequest, NextResponse } from "next/server";
-
-type GameType = "click" | "typing" | "aimlab";
 
 type ScorePayload = {
   gameType?: string;
@@ -40,18 +39,10 @@ function sanitizeUsername(raw: unknown) {
   return cleaned.length > 0 ? cleaned : "anonymous";
 }
 
-function normalizeGameType(value: unknown): GameType | null {
-  if (value === "click" || value === "typing" || value === "aimlab") {
-    return value;
-  }
-
-  return null;
-}
-
 function validatePayload(payload: ScorePayload) {
   const gameType = normalizeGameType(payload.gameType);
   if (!gameType) {
-    return { error: "Invalid gameType. Use 'click', 'typing', or 'aimlab'." };
+    return { error: "Invalid gameType. Use 'click', 'typing', 'aimlab', or 'colormatch'." };
   }
 
   const username = sanitizeUsername(payload.username);
@@ -104,6 +95,30 @@ function validatePayload(payload: ScorePayload) {
         score,
         wpm: null,
         accuracy: accuracyRaw,
+        durationMs,
+      },
+    };
+  }
+
+  if (gameType === "colormatch") {
+    const score = asInt(payload.score);
+    const durationMs = asInt(payload.durationMs);
+
+    if (score === null || score < 0 || score > 100) {
+      return { error: "score is required for colormatch game and must be between 0 and 100." };
+    }
+
+    if (durationMs === null || durationMs < 500 || durationMs > 300000) {
+      return { error: "durationMs is required for colormatch game and must be between 500 and 300000." };
+    }
+
+    return {
+      value: {
+        gameType,
+        username,
+        score,
+        wpm: null,
+        accuracy: score,
         durationMs,
       },
     };
