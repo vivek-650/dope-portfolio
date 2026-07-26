@@ -15,7 +15,12 @@ import { getTechIconPath } from "@/components/tech-icon-label";
 
 export default function WorkSection() {
   return (
-    <Accordion type="single" collapsible className="w-full grid gap-6">
+    <Accordion
+      type="single"
+      collapsible
+      defaultValue={DATA.work[0]?.company}
+      className="w-full grid gap-6"
+    >
       {DATA.work.map((work, index) => {
         const statusBadge = getWorkStatusBadge(index);
 

@@ -10,7 +10,7 @@ type NekoContextType = {
 const NekoContext = createContext<NekoContextType | null>(null);
 
 export function NekoProvider({ children }: { children: React.ReactNode }) {
-  const [showNeko, setShowNeko] = useState(false);
+  const [showNeko, setShowNeko] = useState(true);
 
   return (
     <NekoContext.Provider value={{ showNeko, setShowNeko }}>

@@ -12,7 +12,6 @@ import ContactSection from "@/components/section/contact-section";
 import ProjectsSection from "@/components/section/projects-section";
 import WorkSection from "@/components/section/work-section";
 import { Button } from "@/components/ui/button";
-import { useNeko } from "@/context/neko-context";
 import { TechIconLabel } from "@/components/tech-icon-label";
 
 const TypingGameSection = dynamic(
@@ -23,17 +22,11 @@ const AimLabGameSection = dynamic(
   () => import("@/components/section/aimlab-game-section"),
   { ssr: false },
 );
-const SnakeGame = dynamic(() => import("@/components/games/snake-game"), {
-  ssr: false,
-});
 
 const BLUR_FADE_DELAY = 0.04;
 
 export default function Page() {
-  const [snakeActive, setSnakeActive] = useState(false);
   const [isReadMoreOpen, setIsReadMoreOpen] = useState(false);
-  const { showNeko, setShowNeko } = useNeko();
-  const isSnakeTriggerLocked = showNeko;
 
   const summaryParagraphs = DATA.summary
     .split("\n\n")
@@ -230,26 +223,11 @@ export default function Page() {
         </div>
       </section>
 
-      {!showNeko && (
-        <div className="text-xs text-muted-foreground/12">
-          click here to see a surprise ↓
-        </div>
-      )}
-
       {/* MINI GAMES */}
       <section id="games">
         <div className="flex flex-col gap-y-4">
           <BlurFade delay={BLUR_FADE_DELAY * 8}>
-            <h2
-              onClick={() => {
-                if (!snakeActive && !isSnakeTriggerLocked) {
-                  setSnakeActive(true);
-                }
-              }}
-              className={`inline-flex items-center gap-2 text-xl font-bold transition-opacity ${isSnakeTriggerLocked ? "cursor-not-allowed opacity-55" : "cursor-pointer hover:opacity-70"}`}
-            >
-                            Speed Games
-            </h2>
+            <h2 className="text-xl font-bold">Speed Games</h2>
           </BlurFade>
 
           <BlurFade delay={BLUR_FADE_DELAY * 9}>
@@ -259,17 +237,6 @@ export default function Page() {
           <BlurFade delay={BLUR_FADE_DELAY * 10}>
             <AimLabGameSection />
           </BlurFade>
-
-          {/* Snake overlay */}
-          {snakeActive ? (
-            <SnakeGame
-              isActive={snakeActive}
-              onComplete={() => {
-                setSnakeActive(false);
-                setShowNeko(true);
-              }}
-            />
-          ) : null}
         </div>
       </section>
 

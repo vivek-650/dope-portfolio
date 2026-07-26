@@ -115,7 +115,7 @@ window.startOneko = function () {
     const bubble = document.createElement("div");
 
     bubble.innerText =
-      "meow… thank you.\nI got really scared from that thing...\nI’m gonna stay close to you.";
+      "meow~ hi there! 🐾\nI've been waiting for a visitor like you.\nstick around, I'll keep you company.";
     // 🔥 Main bubble styling
     bubble.style.position = "fixed";
 

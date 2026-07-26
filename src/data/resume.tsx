@@ -231,6 +231,24 @@ export const DATA = {
       video: "",
     },
     {
+      title: "Sanjay Puja Bhandar",
+      href: "https://sanjaypujabhandar.versera.in/",
+      dates: "2026",
+      active: true,
+      description:
+        "Built a full-stack e-commerce platform for Sanjay Puja Bhandar, enabling online sales of religious items with a seamless shopping experience.\n\n- Developed a responsive frontend with Next.js and Tailwind CSS for optimal user experience across devices.\n- Implemented secure payment processing and order management features.\n- Optimized product catalog and search functionality for better discoverability.",
+      technologies: ["Next.js", "TypeScript", "PostgreSQL", "Tailwind CSS", "Node.js", "Express.js"],
+      links: [
+        {
+          type: "Live",
+          href: "https://sanjaypujabhandar.versera.in/",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "/spb.png",
+      video: "",
+    },
+    {
       title: "Askly AI",
       href: "https://shorturl.at/RDQ0R",
       dates: "2025",
@@ -277,7 +295,8 @@ export const WORK_STATUS = {
   },
   recent: {
     label: "Recent",
-    className: "bg-muted/70 text-muted-foreground border border-border rounded-md",
+    className:
+      "bg-gradient-to-r from-indigo-800 via-purple-800 to-violet-900 text-amber-200 border border-amber-400/30 rounded-md",
   },
 } as const;
 
