@@ -238,10 +238,6 @@ export default function Page() {
             <TypingGameSection />
           </BlurFade>
 
-          {/* <BlurFade delay={BLUR_FADE_DELAY * 10}>
-            <AimLabGameSection />
-          </BlurFade> */}
-
           <BlurFade delay={BLUR_FADE_DELAY * 10}>
             <ColorMatchGameSection />
           </BlurFade>
