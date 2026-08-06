@@ -191,6 +191,24 @@ export const DATA = {
       video: "",
     },
     {
+      title: "CheatMaker",
+      href: "https:/cheatmaker.versera.in",
+      dates: "2026",
+      active: true,
+      description:
+        "Paste your full syllabus once. Cheat Maker extracts the real topics, structures them cleanly, and generates compact cheat sheets built for last-minute revision.",
+      technologies: ["TypeScript","Next.js", "Supabase", "Prisma","OpenAI"],
+      links: [
+        {
+          type: "Live",
+          href: "https:/cheatmaker.versera.in",
+          icon: <Icons.globe className="size-3" />,
+        },
+      ],
+      image: "/cheatmaker.png",
+      video: "",
+    },
+    {
       title: "Playlix",
       href: "https://playlix-beta.vercel.app/",
       dates: "2026",
@@ -206,6 +224,24 @@ export const DATA = {
         },
       ],
       image: "/playlix.jpeg",
+      video: "",
+    },
+    {
+      title: "Versera Media",
+      href: "https://media-versera.in",
+      dates: "2026",
+      active: true,
+      description:
+        "",
+      technologies: ["TypeScript","Next.js", "Framer", "GSAP", "TailwindCSS"],
+      links: [
+        {
+          type: "Live",
+          href: "https://media-versera.in",
+          icon: <Icons.globe className="size-3" />,
+        },
+      ],
+      image: "/media-versera.png",
       video: "",
     },
     {

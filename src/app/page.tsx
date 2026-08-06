@@ -117,7 +117,7 @@ export default function Page() {
             <div className="prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
               <p className="m-0 leading-[1.35]">
                 <span>I build production-ready web and AI applications using </span>
-                <span className="inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-[10px] leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
+                <span className="mr-1.5 mb-1 inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-[10px] leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
                   <TechIconLabel
                     label="TypeScript"
                     className="gap-1 leading-none"
@@ -126,8 +126,8 @@ export default function Page() {
                     textClassName="text-inherit leading-none"
                   />
                 </span>
-                <span>, </span>
-                <span className="inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-[10px] leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
+                
+                <span className="mr-1.5 mb-1 inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-[10px] leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
                   <TechIconLabel
                     label="React"
                     className="gap-1 leading-none"
@@ -136,8 +136,8 @@ export default function Page() {
                     textClassName="text-inherit leading-none"
                   />
                 </span>
-                <span>, </span>
-                <span className="inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-[10px] leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
+                
+                <span className="mr-1.5 mb-1 inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-[10px] leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
                   <TechIconLabel
                     label="Next.js"
                     className="gap-1 leading-none"
@@ -146,8 +146,8 @@ export default function Page() {
                     textClassName="text-inherit leading-none"
                   />
                 </span>
-                <span>, </span>
-                <span className="inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-[10px] leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
+                
+                <span className="mr-1.5 mb-1 inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-[10px] leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
                   <TechIconLabel
                     label="Node.js"
                     className="gap-1 leading-none"
@@ -156,7 +156,7 @@ export default function Page() {
                     textClassName="text-inherit leading-none"
                   />
                 </span>
-                {/* <span>, </span> */}
+                {/*  */}
                 {/* <span className="inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-[10px] leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
                   <TechIconLabel
                     label="FastAPI"

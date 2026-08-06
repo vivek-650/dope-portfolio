@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sf http://localhost:3000 -o /dev/null -w \"port 3000: %{http_code}\\\\n\")",
+      "Bash(tasklist)"
+    ]
+  }
+}

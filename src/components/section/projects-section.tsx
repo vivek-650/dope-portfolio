@@ -1,10 +1,16 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { ProjectCard } from "@/components/project-card";
+import { Button } from "@/components/ui/button";
 import { DATA } from "@/data/resume";
+import Link from "next/link";
 
 const BLUR_FADE_DELAY = 0.04;
+const HOMEPAGE_PROJECT_LIMIT = 6;
 
 export default function ProjectsSection() {
+    const featuredProjects = DATA.projects.slice(0, HOMEPAGE_PROJECT_LIMIT);
+    const hasMoreProjects = DATA.projects.length > HOMEPAGE_PROJECT_LIMIT;
+
     return (
         <section id="projects">
             <div className="flex min-h-0 flex-col gap-y-8">
@@ -32,7 +38,7 @@ export default function ProjectsSection() {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto auto-rows-fr">
-                    {DATA.projects.map((project, id) => (
+                    {featuredProjects.map((project, id) => (
                         <BlurFade
                             key={project.title}
                             delay={BLUR_FADE_DELAY * 12 + id * 0.05}
@@ -52,6 +58,16 @@ export default function ProjectsSection() {
                         </BlurFade>
                     ))}
                 </div>
+                {hasMoreProjects && (
+                    <BlurFade
+                        delay={BLUR_FADE_DELAY * 12 + featuredProjects.length * 0.05}
+                        className="flex justify-center"
+                    >
+                        <Button asChild variant="outline" className="rounded-full px-5">
+                            <Link href="/projects">Show all projects</Link>
+                        </Button>
+                    </BlurFade>
+                )}
             </div>
         </section>
     );
