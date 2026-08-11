@@ -13,6 +13,7 @@ import ProjectsSection from "@/components/section/projects-section";
 import WorkSection from "@/components/section/work-section";
 import { Button } from "@/components/ui/button";
 import { TechIconLabel } from "@/components/tech-icon-label";
+import SocialProfileCard from "@/components/social-profile-card";
 
 const TypingGameSection = dynamic(
   () => import("@/components/section/typing-game-section"),
@@ -28,6 +29,18 @@ const ColorMatchGameSection = dynamic(
 );
 
 const BLUR_FADE_DELAY = 0.04;
+
+const SOCIAL_PROFILE_MAP: Record<
+  string,
+  typeof DATA.socialProfiles.twitter | typeof DATA.socialProfiles.github | typeof DATA.socialProfiles.linkedin
+> = {
+  Twitter: DATA.socialProfiles.twitter,
+  GitHub: DATA.socialProfiles.github,
+  LinkedIn: DATA.socialProfiles.linkedin,
+};
+
+const SOCIAL_ICON_CLASSNAME =
+  "inline-flex h-9 w-9 items-center justify-center rounded-md border border-border/70 bg-background/60 text-muted-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/30 hover:text-foreground hover:shadow-[0_0_0_4px_rgba(255,255,255,0.04)]";
 
 export default function Page() {
   const [isReadMoreOpen, setIsReadMoreOpen] = useState(false);
@@ -64,20 +77,33 @@ export default function Page() {
                     .filter(([key, value]) => value.navbar && key.toLowerCase() !== "spotify")
                     .map(([key, value], index) => {
                       const Icon = value.icon;
+                      const profile = SOCIAL_PROFILE_MAP[key];
 
                       return (
                         <BlurFade key={key} delay={BLUR_FADE_DELAY * (2 + index * 0.5)}>
-                          <Link
-                            href={value.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={value.name}
-                            title={value.name}
-                            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border/70 bg-background/60 text-muted-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/30 hover:text-foreground hover:shadow-[0_0_0_4px_rgba(255,255,255,0.04)]"
-                          >
-                            <Icon className="h-4 w-4" />
-                            <span className="sr-only">{value.name}</span>
-                          </Link>
+                          {profile ? (
+                            <SocialProfileCard
+                              profile={profile}
+                              href={value.url}
+                              label={value.name}
+                              className={SOCIAL_ICON_CLASSNAME}
+                            >
+                              <Icon className="h-4 w-4" />
+                              <span className="sr-only">{value.name}</span>
+                            </SocialProfileCard>
+                          ) : (
+                            <Link
+                              href={value.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={value.name}
+                              title={value.name}
+                              className={SOCIAL_ICON_CLASSNAME}
+                            >
+                              <Icon className="h-4 w-4" />
+                              <span className="sr-only">{value.name}</span>
+                            </Link>
+                          )}
                         </BlurFade>
                       );
                     })}
