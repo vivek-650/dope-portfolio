@@ -38,10 +38,10 @@ export default function WorkPage() {
           </Button>
         </BlurFade>
         <BlurFade delay={BLUR_FADE_DELAY * 1.5}>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tighter">Work Experience</h1>
+          <h1 className="text-2xl sm:text-3xl tracking-tight">Work Experience</h1>
         </BlurFade>
         <BlurFade delay={BLUR_FADE_DELAY * 2}>
-          <p className="text-muted-foreground max-w-2xl">
+          <p className="text-sm sm:text-base text-muted-foreground max-w-2xl">
             My work experiences across startup products, AI-powered systems, and high-ownership engineering roles.
           </p>
         </BlurFade>
@@ -59,7 +59,7 @@ export default function WorkPage() {
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-semibold text-xs inline-flex items-center gap-1">
+                      <span className="font-semibold text-sm sm:text-base tracking-tight inline-flex items-center gap-1">
                         {work.company}
                       </span>
                       {statusBadge && <Badge className={statusBadge.className}>{statusBadge.label}</Badge>}
@@ -74,7 +74,7 @@ export default function WorkPage() {
 
                 {"technologies" in work && work.technologies && work.technologies.length > 0 && (
                   <div className="mt-5 space-y-2">
-                    <h3 className="text-sm font-semibold">Technologies & Tools</h3>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Technologies & Tools</p>
                     <div className="flex flex-wrap gap-2">
                       {work.technologies.map((tech) => (
                         <span
@@ -92,7 +92,7 @@ export default function WorkPage() {
                 )}
 
                 <div className="mt-5 space-y-2">
-                  <h3 className="text-sm font-semibold">What I&apos;ve done</h3>
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">What I&apos;ve done</p>
                   {intro && <p className="text-sm text-muted-foreground leading-relaxed">{intro}</p>}
                   <ul className="space-y-2 text-sm text-muted-foreground leading-relaxed">
                     {highlights.map((item) => (

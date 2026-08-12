@@ -26,10 +26,10 @@ export default function ProjectsPage() {
           </Button>
         </BlurFade>
         <BlurFade delay={BLUR_FADE_DELAY * 1.5}>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tighter">Projects</h1>
+          <h1 className="text-2xl sm:text-3xl tracking-tight">Projects</h1>
         </BlurFade>
         <BlurFade delay={BLUR_FADE_DELAY * 2}>
-          <p className="text-muted-foreground max-w-2xl">
+          <p className="text-sm sm:text-base text-muted-foreground max-w-2xl">
             Product-focused builds across AI automation, retrieval systems, and full-stack
             platforms designed for reliability, speed, and measurable utility.
           </p>

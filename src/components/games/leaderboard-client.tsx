@@ -88,7 +88,7 @@ export default function LeaderboardClient({ gameType }: Props) {
       <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_20px_60px_-25px_rgba(0,0,0,0.65)] p-6 space-y-4">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">
+            <h1 className="text-2xl sm:text-3xl tracking-tight">
               {GAME_META[gameType].title} Leaderboard
             </h1>
             <p className="text-sm text-muted-foreground">{GAME_META[gameType].subtitle}</p>
@@ -139,7 +139,7 @@ export default function LeaderboardClient({ gameType }: Props) {
                 >
                   <span
                     className={cn(
-                      "text-sm tabular-nums text-muted-foreground",
+                      "text-xs tabular-nums text-muted-foreground",
                       isTopThree && "inline-flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold",
                       isTopThree && medalBadgeClass
                     )}
@@ -175,7 +175,7 @@ export default function LeaderboardClient({ gameType }: Props) {
                     )}
                   </div>
                   <div className="text-right">
-                    <span className="font-semibold tabular-nums">
+                    <span className="text-base sm:text-lg font-semibold tabular-nums">
                       {gameType === "click"
                         ? row.leaderboard_score ?? 0
                         : gameType === "typing"

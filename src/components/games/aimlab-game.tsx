@@ -390,7 +390,7 @@ export default function AimLab({ variant = "full" }: AimLabProps) {
           padding: 18px 0 22px;
         }
 
-        .al-app-mini .al-res-score { font-size: 58px; }
+        .al-app-mini .al-res-score { font-size: 44px; }
 
         .al-app-mini .al-res-grid,
         .al-app-mini .al-submit-wrap,
@@ -438,8 +438,8 @@ export default function AimLab({ variant = "full" }: AimLabProps) {
         .al-hud-title { font-size: 11px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; font-weight: 600; margin-right: auto; }
         .al-hud-title span { color: var(--red); }
         .al-hud-item { display: flex; flex-direction: column; align-items: center; min-width: 80px; }
-        .al-hud-label { font-size: 9px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; font-family: var(--al-font-mono); }
-        .al-hud-val { font-size: 22px; font-weight: 700; font-family: var(--al-font-mono); line-height: 1.1; }
+        .al-hud-label { font-size: 10px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; font-family: var(--al-font-mono); }
+        .al-hud-val { font-size: 24px; font-weight: 700; font-family: var(--al-font-mono); line-height: 1.1; }
         .al-hud-sep { width: 1px; height: 32px; background: #1e1e28; margin: 0 18px; }
         .al-hud-timer { color: var(--red); }
         @keyframes al-blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
@@ -564,11 +564,11 @@ export default function AimLab({ variant = "full" }: AimLabProps) {
         /* Results */
         .al-results { background: rgba(8,8,10,0.96); gap: 0; }
         .al-res-header { font-size: 10px; letter-spacing: 5px; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
-        .al-res-score { font-size: 72px; font-weight: 800; color: var(--red); font-family: var(--al-font-mono); line-height: 1; text-shadow: 0 0 30px var(--red-glow); }
+        .al-res-score { font-size: 56px; font-weight: 800; color: var(--red); font-family: var(--al-font-mono); line-height: 1; text-shadow: 0 0 30px var(--red-glow); }
         .al-res-grade { font-size: 16px; font-weight: 700; letter-spacing: 4px; margin-bottom: 20px; text-transform: uppercase; }
         .al-res-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; width: 380px; margin: 0 0 20px; }
         .al-res-card { background: var(--surface); border: 1px solid #1e1e28; border-radius: 8px; padding: 14px; text-align: center; }
-        .al-res-card-label { font-size: 9px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; font-family: var(--al-font-mono); }
+        .al-res-card-label { font-size: 10px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; font-family: var(--al-font-mono); }
         .al-res-card-val { font-size: 24px; font-weight: 700; font-family: var(--al-font-mono); }
         .al-good { color: #4ade80; } .al-warn { color: var(--gold); } .al-bad { color: var(--red); }
         .al-timeline-bar { width: 380px; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; margin-bottom: 20px; }

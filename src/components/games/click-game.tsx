@@ -154,19 +154,19 @@ export default function ClickGame() {
       <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_20px_60px_-25px_rgba(0,0,0,0.65)] p-6 sm:p-8 space-y-6">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">Click Speed Game</h1>
+            <h1 className="text-2xl sm:text-3xl tracking-tight">Click Speed Game</h1>
             <p className="text-sm text-muted-foreground">Tap as fast as you can in 5 seconds.</p>
           </div>
           <div className="rounded-lg border border-border bg-background/60 px-3 py-2 text-right">
             <p className="text-xs text-muted-foreground">Time left</p>
-            <p className="text-xl font-semibold tabular-nums">{timeLeft}s</p>
+            <p className="text-xl sm:text-2xl font-bold tabular-nums">{timeLeft}s</p>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-xl border border-border/70 bg-background/40 p-4">
             <p className="text-xs text-muted-foreground">Live score</p>
-            <p className="text-3xl font-bold tabular-nums">{clicks}</p>
+            <p className="text-xl sm:text-2xl font-bold tabular-nums">{clicks}</p>
           </div>
           <div className="rounded-xl border border-border/70 bg-background/40 p-4">
             <p className="text-xs text-muted-foreground">Status</p>

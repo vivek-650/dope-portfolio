@@ -59,12 +59,14 @@ export default function Page() {
         <div className="mx-auto w-full max-w-2xl space-y-8">
           <div className="gap-2 gap-y-6 flex flex-col md:flex-row justify-between">
             <div className="gap-2 flex flex-col order-2 md:order-1">
-              <BlurFadeText
-                delay={BLUR_FADE_DELAY}
-                className="text-xl font-semibold tracking-tighter sm:text-2xl lg:text-2xl"
-                yOffset={8}
-                text={DATA.name}
-              />
+              <h1 className="text-2xl sm:text-3xl tracking-tight">
+                <BlurFadeText
+                  as="span"
+                  delay={BLUR_FADE_DELAY}
+                  yOffset={8}
+                  text={DATA.name}
+                />
+              </h1>
               <BlurFadeText
                 className="text-muted-foreground max-w-162.5"
                 delay={BLUR_FADE_DELAY * 1.5}
@@ -136,49 +138,49 @@ export default function Page() {
       <section id="about">
         <div className="flex flex-col gap-y-4">
           <BlurFade delay={BLUR_FADE_DELAY * 3}>
-            <h2 className="text-xl font-bold">About</h2>
+            <h2 className="text-xl sm:text-2xl">About</h2>
           </BlurFade>
 
           <BlurFade delay={BLUR_FADE_DELAY * 4}>
             <div className="prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
               <p className="m-0 leading-[1.35]">
                 <span>I build production-ready web and AI applications using </span>
-                <span className="mr-1.5 mb-1 inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-[10px] leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
+                <span className="mr-1.5 mb-1 inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-xs leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
                   <TechIconLabel
                     label="TypeScript"
                     className="gap-1 leading-none"
-                    iconSize={10}
-                    iconClassName="size-[10px]"
+                    iconSize={12}
+                    iconClassName="size-3"
                     textClassName="text-inherit leading-none"
                   />
                 </span>
                 
-                <span className="mr-1.5 mb-1 inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-[10px] leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
+                <span className="mr-1.5 mb-1 inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-xs leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
                   <TechIconLabel
                     label="React"
                     className="gap-1 leading-none"
-                    iconSize={10}
-                    iconClassName="size-[10px]"
+                    iconSize={12}
+                    iconClassName="size-3"
                     textClassName="text-inherit leading-none"
                   />
                 </span>
                 
-                <span className="mr-1.5 mb-1 inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-[10px] leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
+                <span className="mr-1.5 mb-1 inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-xs leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
                   <TechIconLabel
                     label="Next.js"
                     className="gap-1 leading-none"
-                    iconSize={10}
-                    iconClassName="size-[10px]"
+                    iconSize={12}
+                    iconClassName="size-3"
                     textClassName="text-inherit leading-none"
                   />
                 </span>
                 
-                <span className="mr-1.5 mb-1 inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-[10px] leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
+                <span className="mr-1.5 mb-1 inline-flex h-7 items-center gap-1 align-middle rounded-md border border-zinc-300 bg-zinc-100 px-1.5 py-0 text-xs leading-none font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
                   <TechIconLabel
                     label="Node.js"
                     className="gap-1 leading-none"
-                    iconSize={10}
-                    iconClassName="size-[10px]"
+                    iconSize={12}
+                    iconClassName="size-3"
                     textClassName="text-inherit leading-none"
                   />
                 </span>
@@ -187,8 +189,8 @@ export default function Page() {
                   <TechIconLabel
                     label="FastAPI"
                     className="gap-1 leading-none"
-                    iconSize={10}
-                    iconClassName="size-[10px]"
+                    iconSize={12}
+                    iconClassName="size-3"
                     textClassName="text-inherit leading-none"
                   />
                 </span> */}
@@ -238,7 +240,7 @@ export default function Page() {
       <section id="work">
         <div className="flex flex-col gap-y-6">
           <BlurFade delay={BLUR_FADE_DELAY * 5}>
-            <h2 className="text-xl font-bold">Work Experience</h2>
+            <h2 className="text-xl sm:text-2xl">Work Experience</h2>
           </BlurFade>
 
           <BlurFade delay={BLUR_FADE_DELAY * 6}>
@@ -257,7 +259,7 @@ export default function Page() {
       <section id="games">
         <div className="flex flex-col gap-y-4">
           <BlurFade delay={BLUR_FADE_DELAY * 8}>
-            <h2 className="text-xl font-bold">Speed Games</h2>
+            <h2 className="text-xl sm:text-2xl">Speed Games</h2>
           </BlurFade>
 
           <BlurFade delay={BLUR_FADE_DELAY * 9}>

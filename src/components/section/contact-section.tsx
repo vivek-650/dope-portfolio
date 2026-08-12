@@ -16,7 +16,7 @@ export default function ContactSection() {
       `}</style>
       
       <div className="absolute -top-4 border bg-primary z-10 rounded-xl px-4 py-1 left-1/2 -translate-x-1/2">
-        <span className="text-background text-sm font-medium">Contact</span>
+        <span className="text-background text-xs font-medium uppercase tracking-wide">Contact</span>
       </div>
       <div className="absolute inset-0 top-0 left-0 right-0 h-1/2 rounded-xl overflow-hidden">
         <FlickeringGrid
@@ -30,7 +30,7 @@ export default function ContactSection() {
         />
       </div>
       <div className="relative flex flex-col items-center gap-3 text-center">
-        <div className="mx-auto max-w-3xl text-base sm:text-sm text-muted-foreground leading-relaxed">
+        <div className="mx-auto max-w-3xl text-sm sm:text-base text-muted-foreground leading-relaxed">
           <span>Available for freelance or full-time roles. Slide into my </span>
           <Link
             href="https://x.com/curious__Anand"
@@ -52,7 +52,7 @@ export default function ContactSection() {
           <span> me.</span>
         </div>
 
-        <div className="mx-auto max-w-3xl text-base sm:text-sm text-muted-foreground leading-relaxed">
+        <div className="mx-auto max-w-3xl text-sm sm:text-base text-muted-foreground leading-relaxed">
           <Link
             href={DATA.contact.social.GitHub.url}
             target="_blank"

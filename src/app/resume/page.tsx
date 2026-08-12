@@ -11,10 +11,10 @@ export default function ResumePage() {
     <main className="min-h-dvh flex flex-col gap-8 relative">
       <section className="space-y-2">
         <BlurFade delay={BLUR_FADE_DELAY}>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Resume</h1>
+          <h1 className="text-2xl sm:text-3xl tracking-tight">Resume</h1>
         </BlurFade>
         <BlurFade delay={BLUR_FADE_DELAY * 2}>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm sm:text-base text-muted-foreground">
             View and download my professional resume.
           </p>
         </BlurFade>

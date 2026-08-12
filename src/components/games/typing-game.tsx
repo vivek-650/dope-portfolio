@@ -146,17 +146,17 @@ export default function TypingGame() {
       <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_20px_60px_-25px_rgba(0,0,0,0.65)] p-6 sm:p-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">Typing Speed Game</h1>
+            <h1 className="text-2xl sm:text-3xl tracking-tight">Typing Speed Game</h1>
             <p className="text-sm text-muted-foreground">Finish the phrase with high speed and precision.</p>
           </div>
           <div className="flex gap-3">
             <div className="rounded-lg border border-border bg-background/60 px-3 py-2 text-right min-w-24">
               <p className="text-xs text-muted-foreground">WPM</p>
-              <p className="text-xl font-semibold tabular-nums">{wpm}</p>
+              <p className="text-xl sm:text-2xl font-bold tabular-nums">{wpm}</p>
             </div>
             <div className="rounded-lg border border-border bg-background/60 px-3 py-2 text-right min-w-24">
               <p className="text-xs text-muted-foreground">Accuracy</p>
-              <p className="text-xl font-semibold tabular-nums">{accuracy}%</p>
+              <p className="text-xl sm:text-2xl font-bold tabular-nums">{accuracy}%</p>
             </div>
           </div>
         </div>

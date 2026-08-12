@@ -3,7 +3,9 @@
     "allow": [
       "Bash(curl -sf http://localhost:3000 -o /dev/null -w \"port 3000: %{http_code}\\\\n\")",
       "Bash(tasklist)",
-      "Bash(pnpm add *)"
+      "Bash(pnpm add *)",
+      "Bash(curl -sf http://localhost:3000 -o /dev/null -w \"%{http_code}\\\\n\")",
+      "Bash(CHROME_PATH=\"C:/Users/VIVEK/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe\" node shot-typography.js)"
     ]
   }
 }

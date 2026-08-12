@@ -190,10 +190,10 @@ export default function ClickGameSection() {
           <div className="grid grid-cols-2 gap-2">
             <div className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm text-muted-foreground">
               Score{" "}
-              <span className="font-semibold text-foreground tabular-nums ml-1">{clicks}</span>
+              <span className="text-base sm:text-lg font-semibold text-foreground tabular-nums ml-1">{clicks}</span>
             </div>
             <div className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-right text-sm text-muted-foreground">
-              <span className="font-mono tabular-nums text-foreground">{remaining.toFixed(2)}s</span>
+              <span className="text-base sm:text-lg font-semibold font-mono tabular-nums text-foreground">{remaining.toFixed(2)}s</span>
             </div>
           </div>
         ) : null}

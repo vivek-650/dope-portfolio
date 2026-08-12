@@ -10,20 +10,7 @@ import NekoLoader from "@/components/neko-loader";
 import Footer from "@/components/footer";
 import { NekoProvider, useNeko } from "@/context/neko-context";
 import type { ReactNode } from "react";
-import { Geist, Geist_Mono } from "next/font/google";
 import VisitorMilestoneDialog from "@/components/celebration/visitor-milestone-dialog";
-
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: ["400", "500", "600", "700"],
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-mono",
-});
 
 function AppContent({ children }: { children: ReactNode }) {
   const { showNeko } = useNeko();

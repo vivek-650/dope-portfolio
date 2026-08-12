@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { DATA } from "@/data/resume";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { RootLayoutClient } from "./app-content";
 import type { ReactNode } from "react";
 
@@ -61,16 +61,19 @@ export const metadata: Metadata = {
   category: "technology",
 };
 
-const geist = Geist({
-  subsets: ["latin"],
+const satoshi = localFont({
+  src: "../../public/fonts/Satoshi-Variable.woff2",
   variable: "--font-sans",
-  weight: ["400", "500", "600", "700"],
+  weight: "300 900",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-mono",
+const instrumentSerif = localFont({
+  src: "../../public/fonts/InstrumentSerif-Regular.ttf",
+  variable: "--font-serif",
+  weight: "400",
+  style: "normal",
+  display: "swap",
 });
 
 export default function RootLayout({
@@ -108,8 +111,8 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased relative",
-          geist.variable,
-          geistMono.variable
+          satoshi.variable,
+          instrumentSerif.variable
         )}
       >
         <RootLayoutClient>{children}</RootLayoutClient>

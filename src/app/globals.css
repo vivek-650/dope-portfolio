@@ -126,8 +126,21 @@
     @apply border-border;
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
   body {
     @apply bg-background text-foreground;
+    --font-mono: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif) !important;
+    font-weight: 400 !important;
+    font-synthesis-weight: none;
   }
 
   /* Shiki dual theme support */

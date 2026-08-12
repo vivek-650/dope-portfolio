@@ -121,7 +121,7 @@ export function ProjectCard({
       <div className="p-6 flex flex-col gap-3 flex-1">
         <div className="flex items-start justify-between gap-2">
           <div className="flex flex-col gap-1">
-            <h3 className="font-semibold">{title}</h3>
+            <h3 className="text-base sm:text-lg tracking-tight">{title}</h3>
             <time className="text-xs text-muted-foreground">{dates}</time>
           </div>
           <Link
@@ -143,13 +143,13 @@ export function ProjectCard({
             {tags.map((tag) => (
               <Badge
                 key={tag}
-                className="text-[11px] font-medium border border-border h-6 w-fit px-2"
+                className="text-xs font-medium border border-border h-6 w-fit px-2"
                 variant="outline"
               >
                 <TechIconLabel
                   label={tag}
                   iconSize={12}
-                  textClassName="text-[11px] font-medium"
+                  textClassName="text-xs font-medium"
                 />
               </Badge>
             ))}

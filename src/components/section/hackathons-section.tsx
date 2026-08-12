@@ -27,13 +27,13 @@ export default function HackathonsSection() {
           <div className="flex items-center w-full">
             <div className="flex-1 h-px bg-linear-to-r from-transparent from-5% via-border via-95% to-transparent" />
             <div className="border bg-primary z-10 rounded-xl px-4 py-1">
-              <span className="text-background text-sm font-medium">Hackathons</span>
+              <span className="text-background text-xs font-medium uppercase tracking-wide">Hackathons</span>
             </div>
             <div className="flex-1 h-px bg-linear-to-l from-transparent from-5% via-border via-95% to-transparent" />
           </div>
           <div className="flex flex-col gap-y-3 items-center justify-center">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">I like building things</h2>
-            <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed text-balance text-center">
+            <h2 className="text-2xl sm:text-3xl tracking-tight">I like building things</h2>
+            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-balance text-center">
               During my time in university, I attended {hackathons.length}+
               hackathons. People from around the country would come together and
               build incredible things in 2-3 days. It was eye-opening to see the endless possibilities brought to life by a group of motivated and passionate individuals.
@@ -59,7 +59,7 @@ export default function HackathonsSection() {
                   <time className="text-xs text-muted-foreground">{hackathon.dates}</time>
                 )}
                 {hackathon.title && (
-                  <h3 className="font-semibold leading-none">{hackathon.title}</h3>
+                  <h3 className="text-base sm:text-lg tracking-tight leading-none">{hackathon.title}</h3>
                 )}
                 {hackathon.location && (
                   <p className="text-sm text-muted-foreground">{hackathon.location}</p>

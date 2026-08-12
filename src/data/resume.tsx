@@ -235,7 +235,7 @@ export const DATA = {
       active: true,
       description:
         "Paste your full syllabus once. Cheat Maker extracts the real topics, structures them cleanly, and generates compact cheat sheets built for last-minute revision.",
-      technologies: ["TypeScript","Next.js", "Supabase", "Prisma","OpenAI"],
+      technologies: ["TypeScript","Next.js", "Supabase", "Prisma","OpenAI", "Razorpay"],
       links: [
         {
           type: "Live",
@@ -266,7 +266,7 @@ export const DATA = {
     },
     {
       title: "Versera Media",
-      href: "https://media-versera.in",
+      href: "https://media.versera.in",
       dates: "2026",
       active: true,
       description:

@@ -30,12 +30,12 @@ export default function WorkSection() {
               <div className="flex items-center gap-x-3 justify-between w-full text-left">
                 <div className="flex items-center gap-x-3 flex-1 min-w-0">
                   <div className="flex-1 min-w-0 gap-0.5 flex flex-col">
-                    <div className="font-semibold text-xs leading-none flex items-center gap-2">
-                      <span>{work.company}</span>
+                    <div className="leading-none flex items-center gap-2">
+                      <span className="text-sm sm:text-base tracking-tight">{work.company}</span>
                       {statusBadge && (
                         <span
                           className={cn(
-                            "inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide",
+                            "inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium uppercase tracking-wide",
                             statusBadge.className
                           )}
                         >
@@ -75,7 +75,7 @@ export default function WorkSection() {
             <AccordionContent className="p-0 text-xs sm:text-sm text-muted-foreground">
               {work.technologies?.length ? (
                 <div className="mt-3 space-y-2.5">
-                  <p className="text-xs font-semibold text-foreground">Technologies &amp; Tools</p>
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Technologies &amp; Tools</p>
                   <div className="flex flex-wrap items-center gap-2">
                     {work.technologies.map((tech) => (
                       <span

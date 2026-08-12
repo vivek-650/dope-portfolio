@@ -202,7 +202,9 @@ export default function ColorMatchGame({ variant = "full" }: ColorMatchGameProps
     return (
       <div className={cn("space-y-5", isMini ? "" : "")}>
         <div className="flex flex-col items-center gap-1 text-center">
-          <p className="text-4xl font-bold tabular-nums">{roundResult.score}</p>
+          <p className={cn("font-bold tabular-nums", isMini ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl")}>
+            {roundResult.score}
+          </p>
           <p className="text-sm font-medium text-muted-foreground">{roundResult.tier}</p>
           {hintUsed ? (
             <p className="text-xs text-amber-400">Hint used: -{HINT_PENALTY} pts applied</p>

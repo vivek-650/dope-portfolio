@@ -129,10 +129,10 @@ export default async function Blog({
         </Link>
       </div>
       <div className="flex flex-col gap-4">
-        <h1 className="title font-semibold text-3xl md:text-4xl tracking-tighter leading-tight">
+        <h1 className="title text-2xl sm:text-3xl tracking-tight leading-tight">
           {post.title}
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm sm:text-base text-muted-foreground">
           {formatDate(post.publishedAt)}
         </p>
       </div>

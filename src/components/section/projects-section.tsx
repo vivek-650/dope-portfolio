@@ -21,7 +21,7 @@ export default function ProjectsSection() {
 
                         />
                         <div className="border bg-primary z-10 rounded-xl px-4 py-1">
-                            <span className="text-background text-sm font-medium">Selected Products</span>
+                            <span className="text-background text-xs font-medium uppercase tracking-wide">Selected Products</span>
                         </div>
                         <div
                             className="flex-1 h-px bg-linear-to-l from-transparent from-5% via-border via-95% to-transparent"
@@ -29,8 +29,8 @@ export default function ProjectsSection() {
                         />
                     </div>
                     <div className="flex flex-col gap-y-3 items-center justify-center">
-                        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Built for real users, not demos</h2>
-                        <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed text-balance text-center">
+                        <h2 className="text-2xl sm:text-3xl tracking-tight">Built for real users, not demos</h2>
+                        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-balance text-center">
                             Product-focused builds across AI automation, retrieval systems,
                             and full-stack platforms designed for reliability, speed, and
                             measurable utility.
