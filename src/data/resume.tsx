@@ -230,7 +230,7 @@ export const DATA = {
     },
     {
       title: "CheatMaker",
-      href: "https:/cheatmaker.versera.in",
+      href: "https://cheatmaker.versera.in",
       dates: "2026",
       active: true,
       description:
@@ -239,7 +239,7 @@ export const DATA = {
       links: [
         {
           type: "Live",
-          href: "https:/cheatmaker.versera.in",
+          href: "https://cheatmaker.versera.in",
           icon: <Icons.globe className="size-3" />,
         },
       ],
