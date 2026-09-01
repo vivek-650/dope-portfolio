@@ -16,7 +16,7 @@ function formatVisitors(value: number | null): string {
 }
 
 export default function Footer() {
-  const [visitors, setVisitors] = useState<number | null>(5579);
+  const [visitors, setVisitors] = useState<number | null>(8579);
 
   useEffect(() => {
     let isMounted = true;

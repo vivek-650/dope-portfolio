@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
@@ -44,6 +44,17 @@ const SOCIAL_ICON_CLASSNAME =
 
 export default function Page() {
   const [isReadMoreOpen, setIsReadMoreOpen] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      video.pause();
+    }
+  }, []);
 
   const summaryParagraphs = DATA.summary
     .split("\n\n")
@@ -56,80 +67,95 @@ export default function Page() {
     <main className="min-h-dvh flex flex-col gap-14 relative">
       {/* HERO */}
       <section id="hero">
-        <div className="mx-auto w-full max-w-2xl space-y-8">
-          <div className="gap-2 gap-y-6 flex flex-col md:flex-row justify-between">
-            <div className="gap-2 flex flex-col order-2 md:order-1">
-              <h1 className="text-2xl sm:text-3xl tracking-tight">
+        <div className="relative mx-auto w-full max-w-2xl overflow-hidden rounded-2xl border border-white/10">
+          <video
+            ref={videoRef}
+            className="absolute inset-0 h-full w-full object-cover"
+            src="/banner-video.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+          />
+          <div className="absolute inset-0 bg-linear-to-b from-background/75 via-background/85 to-background" />
+
+          <div className="relative space-y-8 p-6 sm:p-8">
+            <div className="gap-2 gap-y-6 flex flex-col md:flex-row justify-between">
+              <div className="gap-2 flex flex-col order-2 md:order-1">
+                <h1 className="text-2xl sm:text-3xl tracking-tight">
+                  <BlurFadeText
+                    as="span"
+                    delay={BLUR_FADE_DELAY}
+                    yOffset={8}
+                    text={DATA.name}
+                  />
+                </h1>
                 <BlurFadeText
-                  as="span"
-                  delay={BLUR_FADE_DELAY}
-                  yOffset={8}
-                  text={DATA.name}
+                  className="text-muted-foreground max-w-162.5"
+                  delay={BLUR_FADE_DELAY * 1.5}
+                  text={DATA.description}
                 />
-              </h1>
-              <BlurFadeText
-                className="text-muted-foreground max-w-162.5"
-                delay={BLUR_FADE_DELAY * 1.5}
-                text={DATA.description}
-              />
 
-              <BlurFade delay={BLUR_FADE_DELAY * 1.8}>
-                <div className="flex flex-wrap items-center gap-2 pt-2">
-                  {Object.entries(DATA.contact.social)
-                    .filter(([key, value]) => value.navbar && key.toLowerCase() !== "spotify")
-                    .map(([key, value], index) => {
-                      const Icon = value.icon;
-                      const profile = SOCIAL_PROFILE_MAP[key];
+                <BlurFade delay={BLUR_FADE_DELAY * 1.8}>
+                  <div className="flex flex-wrap items-center gap-2 pt-2">
+                    {Object.entries(DATA.contact.social)
+                      .filter(([key, value]) => value.navbar && key.toLowerCase() !== "spotify")
+                      .map(([key, value], index) => {
+                        const Icon = value.icon;
+                        const profile = SOCIAL_PROFILE_MAP[key];
 
-                      return (
-                        <BlurFade key={key} delay={BLUR_FADE_DELAY * (2 + index * 0.5)}>
-                          {profile ? (
-                            <SocialProfileCard
-                              profile={profile}
-                              href={value.url}
-                              label={value.name}
-                              className={SOCIAL_ICON_CLASSNAME}
-                            >
-                              <Icon className="h-4 w-4" />
-                              <span className="sr-only">{value.name}</span>
-                            </SocialProfileCard>
-                          ) : (
-                            <Link
-                              href={value.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label={value.name}
-                              title={value.name}
-                              className={SOCIAL_ICON_CLASSNAME}
-                            >
-                              <Icon className="h-4 w-4" />
-                              <span className="sr-only">{value.name}</span>
-                            </Link>
-                          )}
-                        </BlurFade>
-                      );
-                    })}
-                </div>
+                        return (
+                          <BlurFade key={key} delay={BLUR_FADE_DELAY * (2 + index * 0.5)}>
+                            {profile ? (
+                              <SocialProfileCard
+                                profile={profile}
+                                href={value.url}
+                                label={value.name}
+                                className={SOCIAL_ICON_CLASSNAME}
+                              >
+                                <Icon className="h-4 w-4" />
+                                <span className="sr-only">{value.name}</span>
+                              </SocialProfileCard>
+                            ) : (
+                              <Link
+                                href={value.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={value.name}
+                                title={value.name}
+                                className={SOCIAL_ICON_CLASSNAME}
+                              >
+                                <Icon className="h-4 w-4" />
+                                <span className="sr-only">{value.name}</span>
+                              </Link>
+                            )}
+                          </BlurFade>
+                        );
+                      })}
+                  </div>
+                </BlurFade>
+              </div>
+
+              <BlurFade delay={BLUR_FADE_DELAY * 2}>
+                <Avatar className="size-24 md:size-32 border rounded-full shadow-lg">
+                  <AvatarImage
+                    alt={DATA.name}
+                    src="/smiling-me.png"
+                    loading="eager"
+                    className="absolute inset-0 h-full w-full object-cover opacity-100 transition-opacity duration-500 ease-out will-change-[opacity] dark:opacity-0"
+                  />
+                  <AvatarImage
+                    alt={DATA.name}
+                    src="/me.png"
+                    loading="eager"
+                    className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 ease-out will-change-[opacity] dark:opacity-100"
+                  />
+                  <AvatarFallback>{DATA.initials}</AvatarFallback>
+                </Avatar>
               </BlurFade>
             </div>
-
-            <BlurFade delay={BLUR_FADE_DELAY * 2}>
-              <Avatar className="size-24 md:size-32 border rounded-full shadow-lg">
-                <AvatarImage
-                  alt={DATA.name}
-                  src="/smiling-me.png"
-                  loading="eager"
-                  className="absolute inset-0 h-full w-full object-cover opacity-100 transition-opacity duration-500 ease-out will-change-[opacity] dark:opacity-0"
-                />
-                <AvatarImage
-                  alt={DATA.name}
-                  src="/me.png"
-                  loading="eager"
-                  className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 ease-out will-change-[opacity] dark:opacity-100"
-                />
-                <AvatarFallback>{DATA.initials}</AvatarFallback>
-              </Avatar>
-            </BlurFade>
           </div>
         </div>
       </section>
